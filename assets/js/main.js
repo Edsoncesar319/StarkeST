@@ -208,4 +208,55 @@
   window.addEventListener('load', navmenuScrollspy);
   document.addEventListener('scroll', navmenuScrollspy);
 
+  // Hero background tech particles
+  function createHeroParticles() {
+    const animDiv = document.querySelector('.hero-bg-anim');
+    if (!animDiv) return;
+    animDiv.innerHTML = '';
+    // Quadrados (bits)
+    for (let i = 0; i < 10; i++) {
+      const sq = document.createElement('span');
+      sq.className = 'hero-particle-square';
+      sq.style.left = Math.random() * 100 + '%';
+      sq.style.top = Math.random() * 100 + '%';
+      sq.style.width = sq.style.height = (10 + Math.random() * 14) + 'px';
+      sq.style.opacity = 0.18 + Math.random() * 0.22;
+      sq.style.animationDelay = (Math.random() * 6) + 's';
+      animDiv.appendChild(sq);
+    }
+    // Linhas (fluxo de dados)
+    for (let i = 0; i < 6; i++) {
+      const ln = document.createElement('span');
+      ln.className = 'hero-particle-line';
+      ln.style.left = Math.random() * 100 + '%';
+      ln.style.top = Math.random() * 100 + '%';
+      ln.style.width = (40 + Math.random() * 60) + 'px';
+      ln.style.height = '2px';
+      ln.style.opacity = 0.12 + Math.random() * 0.18;
+      ln.style.animationDelay = (Math.random() * 8) + 's';
+      animDiv.appendChild(ln);
+    }
+    // SVG Nuvem
+    for (let i = 0; i < 2; i++) {
+      const cloud = document.createElement('span');
+      cloud.className = 'hero-particle-svg';
+      cloud.innerHTML = `<svg width="48" height="28" viewBox="0 0 48 28" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="24" cy="14" rx="24" ry="14" fill="#fff" fill-opacity="0.08"/></svg>`;
+      cloud.style.left = (10 + Math.random() * 80) + '%';
+      cloud.style.top = (10 + Math.random() * 60) + '%';
+      cloud.style.animationDelay = (Math.random() * 10) + 's';
+      animDiv.appendChild(cloud);
+    }
+    // SVG Banco de Dados
+    for (let i = 0; i < 2; i++) {
+      const db = document.createElement('span');
+      db.className = 'hero-particle-svg';
+      db.innerHTML = `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="16" cy="8" rx="14" ry="6" fill="#00c6ff" fill-opacity="0.10"/><rect x="2" y="8" width="28" height="16" rx="8" fill="#2563eb" fill-opacity="0.08"/></svg>`;
+      db.style.left = (10 + Math.random() * 80) + '%';
+      db.style.top = (30 + Math.random() * 40) + '%';
+      db.style.animationDelay = (Math.random() * 10) + 's';
+      animDiv.appendChild(db);
+    }
+  }
+  window.addEventListener('DOMContentLoaded', createHeroParticles);
+
 })();
