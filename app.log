@@ -265,3 +265,13 @@ smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepte
 2025-10-24 07:29:45,009 - INFO - Iniciando servidor Flask...
 2025-10-24 07:29:45,025 - WARNING -  * Debugger is active!
 2025-10-24 07:29:45,040 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 09:28:42,184 - INFO - Iniciando servidor Flask...
+2025-10-24 09:28:42,320 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.101.3:5000
+2025-10-24 09:28:42,321 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-24 09:28:42,336 - INFO -  * Restarting with stat
+2025-10-24 09:28:43,063 - INFO - Iniciando servidor Flask...
+2025-10-24 09:28:43,089 - WARNING -  * Debugger is active!
+2025-10-24 09:28:43,115 - INFO -  * Debugger PIN: 943-592-462
