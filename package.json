@@ -1,0 +1,22 @@
+{
+  "name": "starke-st-landing",
+  "version": "1.0.0",
+  "description": "Starke ST - Landing Page com Backend Flask",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step required for static site'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "landing-page",
+    "flask",
+    "vercel",
+    "starke-st"
+  ],
+  "author": "Starke Brasil Dev",
+  "license": "MIT",
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  }
+}

@@ -1,0 +1,267 @@
+2025-05-21 11:36:06,972 - INFO - Iniciando servidor Flask...
+2025-05-21 11:36:07,114 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.101.3:5000
+2025-05-21 11:36:07,121 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-21 11:36:07,131 - INFO -  * Restarting with stat
+2025-05-21 11:36:09,598 - INFO - Iniciando servidor Flask...
+2025-05-21 11:36:09,645 - WARNING -  * Debugger is active!
+2025-05-21 11:36:09,675 - INFO -  * Debugger PIN: 112-228-391
+2025-05-21 11:36:34,274 - INFO - Recebido formulário de contato de studio ED (02edsongracom@gmail.com)
+2025-05-21 11:36:36,542 - ERROR - Erro ao enviar email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 41be03b00d2f7-b26eaf6f48esm9682360a12.27 - gsmtp')
+Traceback (most recent call last):
+  File "D:\123\StarkeST\StarkeST\app.py", line 137, in contact
+    mail.send(msg)
+  File "D:\123\StarkeST\StarkeST\venv\Lib\site-packages\flask_mail.py", line 491, in send
+    with self.connect() as connection:
+  File "D:\123\StarkeST\StarkeST\venv\Lib\site-packages\flask_mail.py", line 144, in __enter__
+    self.host = self.configure_host()
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\123\StarkeST\StarkeST\venv\Lib\site-packages\flask_mail.py", line 165, in configure_host
+    host.login(self.mail.username, self.mail.password)
+  File "C:\Python312\Lib\smtplib.py", line 750, in login
+    raise last_exception
+  File "C:\Python312\Lib\smtplib.py", line 739, in login
+    (code, resp) = self.auth(
+                   ^^^^^^^^^^
+  File "C:\Python312\Lib\smtplib.py", line 662, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 41be03b00d2f7-b26eaf6f48esm9682360a12.27 - gsmtp')
+2025-05-21 11:36:36,569 - INFO - 127.0.0.1 - - [21/May/2025 11:36:36] "POST /forms/contact.php HTTP/1.1" 200 -
+2025-05-21 16:53:42,988 - INFO - Iniciando servidor Flask...
+2025-05-21 16:53:43,121 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.101.3:5000
+2025-05-21 16:53:43,121 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-21 16:53:43,121 - INFO -  * Restarting with stat
+2025-05-21 16:53:44,148 - INFO - Iniciando servidor Flask...
+2025-05-21 16:53:44,184 - WARNING -  * Debugger is active!
+2025-05-21 16:53:44,202 - INFO -  * Debugger PIN: 112-228-391
+2025-05-21 16:54:08,799 - INFO - Recebido formulário de contato de studio gadieel (cesarmenote@gmail.com)
+2025-05-21 16:54:11,097 - ERROR - Erro ao enviar email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-742a9829ce8sm9917177b3a.118 - gsmtp')
+Traceback (most recent call last):
+  File "D:\123\StarkeST\StarkeST\app.py", line 137, in contact
+    mail.send(msg)
+  File "D:\123\StarkeST\StarkeST\venv\Lib\site-packages\flask_mail.py", line 491, in send
+    with self.connect() as connection:
+  File "D:\123\StarkeST\StarkeST\venv\Lib\site-packages\flask_mail.py", line 144, in __enter__
+    self.host = self.configure_host()
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\123\StarkeST\StarkeST\venv\Lib\site-packages\flask_mail.py", line 165, in configure_host
+    host.login(self.mail.username, self.mail.password)
+  File "C:\Python312\Lib\smtplib.py", line 750, in login
+    raise last_exception
+  File "C:\Python312\Lib\smtplib.py", line 739, in login
+    (code, resp) = self.auth(
+                   ^^^^^^^^^^
+  File "C:\Python312\Lib\smtplib.py", line 662, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-742a9829ce8sm9917177b3a.118 - gsmtp')
+2025-05-21 16:54:11,131 - INFO - 127.0.0.1 - - [21/May/2025 16:54:11] "POST /forms/contact.php HTTP/1.1" 200 -
+2025-10-24 06:47:11,586 - INFO - Iniciando servidor Flask...
+2025-10-24 06:47:11,750 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.101.3:5000
+2025-10-24 06:47:11,760 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-24 06:47:11,784 - INFO -  * Restarting with stat
+2025-10-24 06:47:13,038 - INFO - Iniciando servidor Flask...
+2025-10-24 06:47:13,058 - WARNING -  * Debugger is active!
+2025-10-24 06:47:13,094 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 06:47:18,952 - INFO - 127.0.0.1 - - [24/Oct/2025 06:47:18] "GET / HTTP/1.1" 200 -
+2025-10-24 06:47:19,073 - INFO - 127.0.0.1 - - [24/Oct/2025 06:47:19] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-10-24 06:51:03,903 - INFO - 127.0.0.1 - - [24/Oct/2025 06:51:03] "[33mOPTIONS /api/login HTTP/1.1[0m" 404 -
+2025-10-24 06:51:53,429 - INFO - Iniciando servidor Flask...
+2025-10-24 06:51:53,525 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.101.3:5000
+2025-10-24 06:51:53,536 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-24 06:51:53,553 - INFO -  * Restarting with stat
+2025-10-24 06:51:54,614 - INFO - Iniciando servidor Flask...
+2025-10-24 06:51:54,632 - WARNING -  * Debugger is active!
+2025-10-24 06:51:54,675 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 06:52:08,482 - INFO - 127.0.0.1 - - [24/Oct/2025 06:52:08] "[33mOPTIONS /api/login HTTP/1.1[0m" 404 -
+2025-10-24 06:53:39,766 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 06:53:39,852 - INFO -  * Restarting with stat
+2025-10-24 06:53:40,731 - INFO - Iniciando servidor Flask...
+2025-10-24 06:53:40,754 - WARNING -  * Debugger is active!
+2025-10-24 06:53:40,786 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 06:53:44,488 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 06:53:44,638 - INFO -  * Restarting with stat
+2025-10-24 06:53:45,727 - INFO - Iniciando servidor Flask...
+2025-10-24 06:53:45,767 - WARNING -  * Debugger is active!
+2025-10-24 06:53:45,821 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 06:53:53,512 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 06:53:53,617 - INFO -  * Restarting with stat
+2025-10-24 06:53:54,431 - INFO - Iniciando servidor Flask...
+2025-10-24 06:53:54,463 - WARNING -  * Debugger is active!
+2025-10-24 06:53:54,490 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 06:55:26,703 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 06:55:26,807 - INFO -  * Restarting with stat
+2025-10-24 06:55:27,913 - INFO - Iniciando servidor Flask...
+2025-10-24 06:55:27,944 - WARNING -  * Debugger is active!
+2025-10-24 06:55:27,980 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 06:55:34,894 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 06:55:35,022 - INFO -  * Restarting with stat
+2025-10-24 06:55:36,109 - INFO - Iniciando servidor Flask...
+2025-10-24 06:55:36,139 - WARNING -  * Debugger is active!
+2025-10-24 06:55:36,172 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 06:55:49,982 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 06:55:50,214 - INFO -  * Restarting with stat
+2025-10-24 06:55:51,673 - INFO - Iniciando servidor Flask...
+2025-10-24 06:55:51,692 - WARNING -  * Debugger is active!
+2025-10-24 06:55:51,736 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 06:55:54,471 - INFO - Iniciando servidor Flask...
+2025-10-24 06:55:54,863 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.101.3:5000
+2025-10-24 06:55:54,872 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-24 06:55:54,930 - INFO -  * Restarting with stat
+2025-10-24 06:55:58,113 - INFO - Iniciando servidor Flask...
+2025-10-24 06:55:58,688 - WARNING -  * Debugger is active!
+2025-10-24 06:55:58,762 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 06:56:00,930 - ERROR - 192.168.101.3 - - [24/Oct/2025 06:56:00] code 400, message Bad request version ('Ü°\x1b>Ð1\x926\x94ÕÅ¢\x90u\x0fWÛ6SdVm\x90x1ú.Ïç\x98&)»')
+2025-10-24 06:56:00,950 - INFO - 192.168.101.3 - - [24/Oct/2025 06:56:00] "[31m[1m\x16\x03\x01\x06 \x01\x00\x06\x9c\x03\x03Y£\x13\x1fêÜ\x95Â\x94"\x01F\x0f£\x93è_X\x03\x1eÛ®íKrjç×mêúá \x85¦ë.\x80W\x9e\x1fhÌ$µ?i\x96ú\x96F¢\x91Êx<\x0deýp\x82ï\x8fü³\x00 úú\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x063ÊÊ\x00\x00\x00\x05\x00\x05\x01\x00\x00\x00\x00\x00\x0b\x00\x02\x01\x00\x00\x0d\x00\x12\x00\x10\x04\x03\x08\x04\x04\x01\x05\x03\x08\x05\x05\x01\x08\x06\x06\x01\x003\x04ï\x04í\x8a\x8a\x00\x01\x00\x11ì\x04ÀÈ$FW×4÷¦86\x08\x81X²\x13ü\x1c\x88\x99!\x0dh\x93\x1fS\x1c=$U7R\x92xy¬Q\x06%\x1cÜ°\x1b>Ð1\x926\x94ÕÅ¢\x90u\x0fWÛ6SdVm\x90x1ú.Ïç\x98&)»[0m" 400 -
+2025-10-24 06:56:01,044 - ERROR - 192.168.101.3 - - [24/Oct/2025 06:56:01] code 400, message Bad request version ('\x00\x12\x00\x10\x04\x03\x08\x04\x04\x01\x05\x03\x08\x05\x05\x01\x08\x06\x06\x01\x003\x04ï\x04íJJ\x00\x01\x00\x11ì\x04ÀÐ¬%t`1×Ôw\\fÁ\x8fú\x16èôÎÎòµ©ôx\x05\x05H§â\x18')
+2025-10-24 06:56:01,096 - INFO - 192.168.101.3 - - [24/Oct/2025 06:56:01] "[31m[1m\x16\x03\x01\x06À\x01\x00\x06¼\x03\x03-{¾clJ\x13F\x81\x07gIJ\x8b3¨E:\x12&R¾Z[ÉøÕvÃÃ4) ZÚ\x9a\x93\x15\x03¹\x12y2®5\x90¦¯}\x97ëÇLÜä\x96Xäe<J\x86\x96wM\x00 ºº\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06S\x1a\x1a\x00\x00\x00-\x00\x02\x01\x01\x00+\x00\x07\x06êê\x03\x04\x03\x03\x00\x05\x00\x05\x01\x00\x00\x00\x00ÿ\x01\x00\x01\x00þ\x0d\x00Ú\x00\x00\x01\x00\x01Ö\x00 \x86Óæ\x93¸\x91Ê\x7f~1#üøE¦ÒÁ\x82r\x85kç\x07CP7=ö¤Ö.o\x00°=\x84î#¬BÙäß\x1d²1OT\x11Á|?ÇI¦b\x81öãðSÆ.AJPºêÏ\x96?e\x86BÝ7úi\x0bû@\x95©U¼³\x18ÿOQÎå`7~Yû\x8aó\x0cE(g¡\x90\x82Á\x0cam\x9bI`\x13\x0bí4ÝÑñ\x9cÔ©. \x8eññY­\x8eÁs7\x9f\x17/\x9e\x1b]}6+\x09jô\x16q\x11\x97\x07¨~\x0ftà=3Ë\x93ÌÄ\x91½ÈgK\x1a\x93Õ\x0d¼À\x9d¼Þ\x0føº·\x1d»Ä\x8b\x87^û,{y\x98\x9cË\x01\x12^\x8c® fúáË\x91¤ÀòÕÅú\x00\x1b\x00\x03\x02\x00\x02\x00\x0b\x00\x02\x01\x00\x00\x0d\x00\x12\x00\x10\x04\x03\x08\x04\x04\x01\x05\x03\x08\x05\x05\x01\x08\x06\x06\x01\x003\x04ï\x04íJJ\x00\x01\x00\x11ì\x04ÀÐ¬%t`1×Ôw\\fÁ\x8fú\x16èôÎÎòµ©ôx\x05\x05H§â\x18[0m" 400 -
+2025-10-24 06:56:04,364 - INFO - 192.168.101.3 - - [24/Oct/2025 06:56:04] "GET / HTTP/1.1" 200 -
+2025-10-24 06:56:04,491 - INFO - 192.168.101.3 - - [24/Oct/2025 06:56:04] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-10-24 06:56:07,376 - INFO - 127.0.0.1 - - [24/Oct/2025 06:56:07] "GET / HTTP/1.1" 200 -
+2025-10-24 06:56:10,730 - INFO - Tentativa de login: Superadm@starkeST.com
+2025-10-24 06:56:10,734 - INFO - Login bem-sucedido para Superadm@starkeST.com
+2025-10-24 06:56:10,736 - INFO - 127.0.0.1 - - [24/Oct/2025 06:56:10] "POST /api/login HTTP/1.1" 200 -
+2025-10-24 06:56:12,927 - INFO - 127.0.0.1 - - [24/Oct/2025 06:56:12] "GET /api/verify-token HTTP/1.1" 200 -
+2025-10-24 06:56:22,546 - INFO - 127.0.0.1 - - [24/Oct/2025 06:56:22] "GET /api/messages HTTP/1.1" 200 -
+2025-10-24 06:56:22,585 - INFO - 127.0.0.1 - - [24/Oct/2025 06:56:22] "OPTIONS /api/login HTTP/1.1" 200 -
+2025-10-24 06:56:33,991 - INFO - 127.0.0.1 - - [24/Oct/2025 06:56:33] "OPTIONS /api/login HTTP/1.1" 200 -
+2025-10-24 06:56:45,995 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 06:56:46,594 - INFO -  * Restarting with stat
+2025-10-24 06:56:47,060 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 06:56:47,212 - INFO -  * Restarting with stat
+2025-10-24 06:56:48,521 - INFO - Iniciando servidor Flask...
+2025-10-24 06:56:48,553 - WARNING -  * Debugger is active!
+2025-10-24 06:56:48,581 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 06:56:48,739 - INFO - Iniciando servidor Flask...
+2025-10-24 06:56:48,759 - WARNING -  * Debugger is active!
+2025-10-24 06:56:48,793 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 06:57:16,359 - INFO - 127.0.0.1 - - [24/Oct/2025 06:57:16] "OPTIONS /api/login HTTP/1.1" 200 -
+2025-10-24 06:58:15,394 - INFO - 127.0.0.1 - - [24/Oct/2025 06:58:15] "[33mGET /login.html HTTP/1.1[0m" 404 -
+2025-10-24 06:58:15,552 - INFO - 127.0.0.1 - - [24/Oct/2025 06:58:15] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-10-24 06:59:48,531 - INFO - 127.0.0.1 - - [24/Oct/2025 06:59:48] "GET / HTTP/1.1" 200 -
+2025-10-24 07:00:02,906 - INFO - 127.0.0.1 - - [24/Oct/2025 07:00:02] "[33mGET /login.html HTTP/1.1[0m" 404 -
+2025-10-24 07:00:36,043 - INFO - 127.0.0.1 - - [24/Oct/2025 07:00:36] "GET / HTTP/1.1" 200 -
+2025-10-24 07:00:40,708 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 07:00:40,989 - INFO -  * Restarting with stat
+2025-10-24 07:00:41,869 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 07:00:42,116 - INFO -  * Restarting with stat
+2025-10-24 07:00:44,327 - INFO - Iniciando servidor Flask...
+2025-10-24 07:00:44,487 - WARNING -  * Debugger is active!
+2025-10-24 07:00:44,602 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 07:00:46,620 - INFO - Iniciando servidor Flask...
+2025-10-24 07:00:46,654 - WARNING -  * Debugger is active!
+2025-10-24 07:00:46,700 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 07:00:48,477 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 07:00:48,588 - INFO -  * Restarting with stat
+2025-10-24 07:00:48,808 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 07:00:48,986 - INFO -  * Restarting with stat
+2025-10-24 07:00:49,734 - INFO - Iniciando servidor Flask...
+2025-10-24 07:00:49,774 - WARNING -  * Debugger is active!
+2025-10-24 07:00:49,817 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 07:00:49,998 - INFO - Iniciando servidor Flask...
+2025-10-24 07:00:50,024 - WARNING -  * Debugger is active!
+2025-10-24 07:00:50,053 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 07:00:51,371 - INFO - 127.0.0.1 - - [24/Oct/2025 07:00:51] "GET / HTTP/1.1" 200 -
+2025-10-24 07:00:56,746 - INFO - 127.0.0.1 - - [24/Oct/2025 07:00:56] "GET /login.html HTTP/1.1" 200 -
+2025-10-24 07:00:59,833 - INFO - 127.0.0.1 - - [24/Oct/2025 07:00:59] "GET /backend/admin.html HTTP/1.1" 200 -
+2025-10-24 07:01:02,427 - INFO - 127.0.0.1 - - [24/Oct/2025 07:01:02] "GET /main.css HTTP/1.1" 200 -
+2025-10-24 07:01:08,274 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 07:01:08,435 - INFO -  * Restarting with stat
+2025-10-24 07:01:09,479 - INFO -  * Detected change in 'D:\\123\\StarkeST\\StarkeST\\app.py', reloading
+2025-10-24 07:01:09,572 - INFO -  * Restarting with stat
+2025-10-24 07:01:09,840 - INFO - Iniciando servidor Flask...
+2025-10-24 07:01:09,860 - WARNING -  * Debugger is active!
+2025-10-24 07:01:09,895 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 07:01:10,275 - INFO - Iniciando servidor Flask...
+2025-10-24 07:01:10,295 - WARNING -  * Debugger is active!
+2025-10-24 07:01:10,320 - INFO -  * Debugger PIN: 943-592-462
+2025-10-24 07:02:10,749 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:10] "GET / HTTP/1.1" 200 -
+2025-10-24 07:02:10,797 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:10] "GET /main.css HTTP/1.1" 200 -
+2025-10-24 07:02:10,878 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:10] "GET /main.js HTTP/1.1" 200 -
+2025-10-24 07:02:11,103 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:11] "GET /assets/vecteezy_robotic-hand-isolated-on-clear-background_47307519.webp HTTP/1.1" 200 -
+2025-10-24 07:02:11,104 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:11] "GET /assets/vecteezy_efficient-workspace-productivity-dashboard-task-management_56595235.webp HTTP/1.1" 200 -
+2025-10-24 07:02:11,105 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:11] "GET /assets/vecteezy_stunning-traditional-financial-data-analysis-chart_57567603.webp HTTP/1.1" 200 -
+2025-10-24 07:02:11,111 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:11] "GET /assets/vecteezy_3d-cartoon-cloud-with-a-cute-smile_56813204.webp HTTP/1.1" 200 -
+2025-10-24 07:02:11,184 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:11] "GET /assets/vecteezy_stunning-classic-hand-choosing-between-two-paths-isolated_60678626.webp HTTP/1.1" 200 -
+2025-10-24 07:02:11,215 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:11] "GET /assets/contacts-icons/black-placeholder-variant.png HTTP/1.1" 200 -
+2025-10-24 07:02:11,449 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:11] "GET /assets/contacts-icons/whatsapp.png HTTP/1.1" 200 -
+2025-10-24 07:02:11,477 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:11] "GET /assets/contacts-icons/email.png HTTP/1.1" 200 -
+2025-10-24 07:02:11,496 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:11] "GET /assets/social-icons/facebook.png HTTP/1.1" 200 -
+2025-10-24 07:02:11,497 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:11] "GET /assets/social-icons/instagram.png HTTP/1.1" 200 -
+2025-10-24 07:02:11,519 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:11] "GET /assets/social-icons/linkedin.png HTTP/1.1" 200 -
+2025-10-24 07:02:11,533 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:11] "GET /assets/social-icons/twitter.png HTTP/1.1" 200 -
+2025-10-24 07:02:21,090 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:21] "GET /login.html HTTP/1.1" 200 -
+2025-10-24 07:02:21,175 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:21] "[36mGET /main.css HTTP/1.1[0m" 304 -
+2025-10-24 07:02:23,091 - INFO - Tentativa de login: Superadm@starkeST.com
+2025-10-24 07:02:23,093 - INFO - Login bem-sucedido para Superadm@starkeST.com
+2025-10-24 07:02:23,096 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:23] "POST /api/login HTTP/1.1" 200 -
+2025-10-24 07:02:24,940 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:24] "GET /backend/admin.html HTTP/1.1" 200 -
+2025-10-24 07:02:25,024 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:25] "GET /api/messages?page=1&page_size=10 HTTP/1.1" 200 -
+2025-10-24 07:02:25,202 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:25] "GET /api/budgets?page=1&page_size=10 HTTP/1.1" 200 -
+2025-10-24 07:02:37,814 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:37] "GET /api/messages?page=1&page_size=10 HTTP/1.1" 200 -
+2025-10-24 07:02:38,408 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:38] "GET /api/messages?page=1&page_size=10 HTTP/1.1" 200 -
+2025-10-24 07:02:59,355 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:59] "[36mGET /backend/admin.html HTTP/1.1[0m" 304 -
+2025-10-24 07:02:59,409 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:59] "GET /api/messages?page=1&page_size=10 HTTP/1.1" 200 -
+2025-10-24 07:02:59,621 - INFO - 127.0.0.1 - - [24/Oct/2025 07:02:59] "GET /api/budgets?page=1&page_size=10 HTTP/1.1" 200 -
+2025-10-24 07:03:11,574 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:11] "[36mGET / HTTP/1.1[0m" 304 -
+2025-10-24 07:03:11,650 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:11] "[36mGET / HTTP/1.1[0m" 304 -
+2025-10-24 07:03:11,732 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:11] "[36mGET /main.css HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,030 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /main.css HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,077 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /main.js HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,113 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/vecteezy_robotic-hand-isolated-on-clear-background_47307519.webp HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,140 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/vecteezy_stunning-traditional-financial-data-analysis-chart_57567603.webp HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,183 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/vecteezy_efficient-workspace-productivity-dashboard-task-management_56595235.webp HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,216 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/vecteezy_3d-cartoon-cloud-with-a-cute-smile_56813204.webp HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,463 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/vecteezy_stunning-classic-hand-choosing-between-two-paths-isolated_60678626.webp HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,508 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /main.js HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,538 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/vecteezy_robotic-hand-isolated-on-clear-background_47307519.webp HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,556 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/vecteezy_stunning-traditional-financial-data-analysis-chart_57567603.webp HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,586 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/vecteezy_efficient-workspace-productivity-dashboard-task-management_56595235.webp HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,593 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/vecteezy_3d-cartoon-cloud-with-a-cute-smile_56813204.webp HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,840 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/vecteezy_stunning-classic-hand-choosing-between-two-paths-isolated_60678626.webp HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,856 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/contacts-icons/black-placeholder-variant.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,857 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/contacts-icons/whatsapp.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,887 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/contacts-icons/email.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,905 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/social-icons/facebook.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:12,911 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:12] "[36mGET /assets/social-icons/instagram.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:13,163 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:13] "[36mGET /assets/social-icons/linkedin.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:13,178 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:13] "[36mGET /assets/social-icons/twitter.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:13,525 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:13] "[36mGET /assets/contacts-icons/black-placeholder-variant.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:13,561 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:13] "[36mGET /assets/contacts-icons/whatsapp.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:13,573 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:13] "[36mGET /assets/contacts-icons/email.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:13,792 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:13] "[36mGET /assets/social-icons/facebook.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:13,840 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:13] "[36mGET /assets/social-icons/instagram.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:13,887 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:13] "[36mGET /assets/social-icons/linkedin.png HTTP/1.1[0m" 304 -
+2025-10-24 07:03:13,890 - INFO - 127.0.0.1 - - [24/Oct/2025 07:03:13] "[36mGET /assets/social-icons/twitter.png HTTP/1.1[0m" 304 -
+2025-10-24 07:04:10,798 - INFO - 127.0.0.1 - - [24/Oct/2025 07:04:10] "[36mGET /login.html HTTP/1.1[0m" 304 -
+2025-10-24 07:04:11,081 - INFO - 127.0.0.1 - - [24/Oct/2025 07:04:11] "[36mGET /main.css HTTP/1.1[0m" 304 -
+2025-10-24 07:04:11,786 - INFO - 127.0.0.1 - - [24/Oct/2025 07:04:11] "GET /api/verify-token HTTP/1.1" 200 -
+2025-10-24 07:04:12,104 - INFO - 127.0.0.1 - - [24/Oct/2025 07:04:12] "[36mGET /backend/admin.html HTTP/1.1[0m" 304 -
+2025-10-24 07:04:12,234 - INFO - 127.0.0.1 - - [24/Oct/2025 07:04:12] "GET /api/messages?page=1&page_size=10 HTTP/1.1" 200 -
+2025-10-24 07:04:12,523 - INFO - 127.0.0.1 - - [24/Oct/2025 07:04:12] "GET /api/budgets?page=1&page_size=10 HTTP/1.1" 200 -
+2025-10-24 07:04:24,997 - INFO - 127.0.0.1 - - [24/Oct/2025 07:04:24] "[36mGET /backend/admin.html HTTP/1.1[0m" 304 -
+2025-10-24 07:04:25,040 - INFO - 127.0.0.1 - - [24/Oct/2025 07:04:25] "GET /api/messages?page=1&page_size=10 HTTP/1.1" 200 -
+2025-10-24 07:04:25,257 - INFO - 127.0.0.1 - - [24/Oct/2025 07:04:25] "GET /api/budgets?page=1&page_size=10 HTTP/1.1" 200 -
+2025-10-24 07:29:44,404 - INFO - Iniciando servidor Flask...
+2025-10-24 07:29:44,457 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.101.3:5000
+2025-10-24 07:29:44,459 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-24 07:29:44,470 - INFO -  * Restarting with stat
+2025-10-24 07:29:45,009 - INFO - Iniciando servidor Flask...
+2025-10-24 07:29:45,025 - WARNING -  * Debugger is active!
+2025-10-24 07:29:45,040 - INFO -  * Debugger PIN: 943-592-462

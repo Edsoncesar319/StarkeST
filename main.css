@@ -1,0 +1,940 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+/* ========== Reset e Variáveis ========== */
+* {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    font-family: Roboto, sans-serif;
+    /*border: 1px solid black;*/
+}
+
+:root {
+    --spacing: 15px;
+    --bg-primary: #FBFBFB;
+    --bg-secondary: white;
+    --text-primary: #222;
+    --text-secondary: #555;
+    --accent: #2563EB;
+    --border: 1px solid #e5e7eb;
+    --radius: 15px;
+    --transition: all 0.2s ease;
+}
+
+/* ========== Scrollbar ========== */
+::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #1d4ed8;
+}
+
+/* ========== Skeleton Loader ========== */
+.skeleton-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: var(--bg-primary);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.5s ease;
+}
+
+.skeleton-wrapper.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.skeleton-nav {
+    padding: var(--spacing);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-bottom: var(--border);
+}
+
+.skeleton-content {
+    flex: 1;
+    display: flex;
+    padding: 50px;
+    gap: 50px;
+}
+
+.skeleton-box {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius);
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-logo {
+    width: 150px;
+    height: 30px;
+}
+
+.skeleton-nav-items {
+    display: flex;
+    gap: var(--spacing);
+}
+
+.skeleton-nav-item {
+    width: 80px;
+    height: 20px;
+}
+
+.skeleton-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.skeleton-title {
+    width: 80%;
+    height: 60px;
+}
+
+.skeleton-subtitle {
+    width: 60%;
+    height: 30px;
+}
+
+.skeleton-text {
+    width: 100%;
+    height: 15px;
+}
+
+.skeleton-buttons {
+    display: flex;
+    gap: var(--spacing);
+    margin-top: 20px;
+}
+
+.skeleton-button {
+    width: 150px;
+    height: 45px;
+}
+
+.skeleton-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.skeleton-image {
+    width: 80%;
+    height: 400px;
+}
+
+/* ========== Animações de Scroll ========== */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fade-in-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-in-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.fade-in-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-in-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.stagger-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.stagger-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ========== Layout Base ========== */
+body {
+    height: 100dvh;
+    display: grid;
+    place-items: center;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+    background-color: var(--bg-primary);
+}
+
+footer {
+    padding: var(--spacing);
+    text-align: center;
+    color: var(--text-primary);
+}
+
+/* ========== Navbar ========== */
+.navbar,
+.floatTopBar {
+    padding: var(--spacing);
+    display: flex;
+    gap: var(--spacing);
+    align-items: center;
+    justify-content: space-around;
+    transition: top .2s ease;
+}
+
+.navbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.floatTopBar {
+    position: fixed;
+    top: var(--spacing);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75%;
+    border-radius: 25px;
+    border: var(--border);
+    background-color: rgba(255, 255, 255, .5);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    padding: 0px;
+}
+
+.logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    border-left: 3px solid var(--accent);
+    padding-left: var(--spacing);
+}
+
+.floatTopBar .logo {
+    font-size: 1.4em;
+    border-left: none;
+}
+
+.floatTopBar #contactUs {
+    border-bottom: 2px solid var(--accent);
+}
+
+.topBar {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing);
+}
+
+.navItem,
+#contactUs {
+    padding: var(--spacing);
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.navItem:hover {
+    color: var(--accent);
+}
+
+.navItem.active {
+    border-bottom: 2px solid var(--accent);
+}
+
+.navbar #contactUs {
+    color: var(--bg-secondary);
+    background-color: var(--accent);
+    border-radius: var(--radius);
+}
+
+#contactUs:hover {
+    opacity: 0.8;
+}
+
+/* ========== Sections ========== */
+.section {
+    height: 100dvh;
+    width: 100%;
+    display: flex;
+}
+
+.section img {
+    width: 50%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+.section .innerSection {
+    display: grid;
+    place-items: center;
+    width: 50%;
+}
+
+#home img {
+    object-position: top;
+}
+
+#home .innerSection .card {
+    margin-bottom: 100px;
+    margin-right: 75px;
+}
+
+#about {
+    margin-bottom: 100px;
+}
+
+#about .innerSection .card {
+    margin-left: 75px;
+}
+
+#clients .innerSection .card {
+    margin-right: 75px;
+    width: 85%;
+}
+
+/* ========== Cards ========== */
+.card {
+    width: 500px;
+    display: flex;
+    height: max-content;
+    flex-direction: column;
+    gap: var(--spacing);
+    color: var(--text-primary);
+}
+
+.card div {
+    display: flex;
+    gap: var(--spacing);
+}
+
+.card h1 {
+    font-size: 3em;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing);
+}
+
+.card h1 i {
+    font-size: 1.1em;
+}
+
+.card h1 span {
+    color: var(--accent);
+    border-bottom: 3px solid var(--accent);
+}
+
+.card h3 {
+    font-size: 1.5em;
+}
+
+.card p {
+    text-align: justify;
+}
+
+.card a {
+    padding: var(--spacing);
+    border-radius: var(--radius);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    width: max-content;
+    background-color: var(--bg-secondary);
+    transition: var(--transition);
+}
+
+.card a:hover {
+    opacity: 0.8;
+}
+
+.card #ourServices {
+    background-color: var(--accent);
+    color: var(--bg-primary);
+}
+
+/* ========== Label Cards ========== */
+.labelCards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing);
+}
+
+.labelCards span {
+    padding: calc(var(--spacing) - 5px);
+    border-radius: var(--radius);
+    border: var(--border);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    background-color: var(--bg-secondary);
+    user-select: none;
+    transition: var(--transition);
+}
+
+.labelCards span:hover {
+    color: var(--text-primary);
+    border-color: var(--text-primary);
+}
+
+/* ========== About Cards ========== */
+.aboutCards {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing);
+}
+
+.aboutCards span {
+    display: flex;
+    gap: var(--spacing);
+    align-items: center;
+}
+
+.aboutCards span i {
+    color: var(--accent);
+    font-size: 1.8em;
+    width: 10%;
+    text-align: center;
+}
+
+.aboutCards span div {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 90%;
+}
+
+.aboutCards span div h3 {
+    font-size: 1.1em;
+}
+
+.aboutCards span div p {
+    font-size: 0.9em;
+    text-align: left;
+}
+
+/* ========== Services ========== */
+#services {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    height: max-content;
+    margin-bottom: 100px;
+}
+
+#services .label {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+#services .label p {
+    font-size: 1.3em;
+}
+
+#services .label h1 {
+    font-size: 3em;
+}
+
+#services .cardsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing);
+    width: 90%;
+    padding: var(--spacing);
+}
+
+.servCard {
+    border: var(--border);
+    width: calc((100% / 3) - var(--spacing));
+    height: 475px;
+    padding: calc(var(--spacing) + 5px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: calc(var(--spacing) + 5px);
+    color: var(--text-primary);
+    border-radius: var(--radius);
+    background-color: var(--bg-secondary);
+    transition: var(--transition);
+}
+
+.servCard:hover {
+    border-color: var(--accent);
+}
+
+.servCard .img {
+    width: 70px;
+    height: 70px;
+    border: var(--border);
+    border-radius: var(--radius);
+    display: grid;
+    place-items: center;
+    background-color: var(--accent);
+}
+
+.servCard .img i {
+    font-size: 3em;
+    color: var(--bg-secondary);
+}
+
+.servCard a {
+    margin-top: var(--spacing);
+    color: var(--accent);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing);
+    margin-bottom: var(--spacing);
+    transition: gap 0.2s ease;
+}
+
+.servCard a:hover {
+    gap: calc(var(--spacing) + 5px);
+}
+
+.servCard ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+    padding: var(--spacing);
+}
+
+.servCard ul li {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing);
+}
+
+.servCard ul li i {
+    color: var(--accent);
+}
+
+.software {
+    height: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing);
+    margin-bottom: 100px;
+}
+
+#why {
+    margin-bottom: 100px;
+}
+
+.software .cardsWrapper {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing);
+    gap: var(--spacing);
+}
+
+.software .cardsWrapper .card {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    height: 300px;
+    width: calc((100% / 4) - var(--spacing));
+    padding: var(--spacing);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: var(--radius);
+    border: var(--border);
+    transition: transform .2s ease, border .2s ease;
+    cursor: pointer;
+}
+
+.software .cardsWrapper .card:hover {
+    border: 1px solid var(--accent);
+    transform: translateY(-10px);
+    transition: transform .2s ease, border .2s ease;
+}
+
+.software .cardsWrapper .card i {
+    font-size: 4em;
+    color: var(--accent);
+}
+
+.software .cardsWrapper .card p {
+    text-align: left;
+}
+
+#team .innerSection .card {
+    margin-right: 0px;
+    margin-left: 75px;
+}
+
+/* ========== Contacts ========== */
+#contacts {
+    display: grid;
+    place-items: center;
+}
+
+#contacts .innerSection {
+    background-color: var(--bg-secondary);
+    width: 85%;
+    height: 90%;
+    border-radius: var(--radius);
+    border: var(--border);
+    display: unset;
+    padding: var(--spacing);
+}
+
+#contacts .innerSection .label {
+    width: 100%;
+    padding: var(--spacing);
+    height: 15%;
+    text-align: center;
+}
+
+#contacts .innerSection .card {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 85%;
+    padding: var(--spacing);
+}
+
+#contacts .innerSection .card .adress,
+#contacts .innerSection .card .message {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing);
+    justify-content: center;
+}
+
+.adress {
+    border-right: var(--border);
+    align-items: flex-start;
+}
+
+.adressCard img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    padding: 5px;
+}
+
+.adressCard {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing);
+    width: 325px;
+    justify-content: flex-start;
+    gap: var(--spacing);
+    padding: 5px !important;
+    border: none !important;
+    color: var(--text-primary) !important;
+    margin-bottom: var(--spacing);
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--spacing) - 5px);
+}
+
+.social-buttons a {
+    border: none !important;
+    padding: 5px;
+}
+
+.social-buttons a img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+}
+
+.adressCard div {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    gap: 5px;
+
+}
+
+.adressCard div p {
+    font-size: .95em;
+}
+
+.adressCard div h3 {
+    font-size: 1em;
+}
+
+.message {
+    align-items: center !important;
+}
+
+.message form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+    width: 60%;
+}
+
+.message form input,
+.message form textarea {
+    padding: var(--spacing);
+    border-radius: var(--radius);
+    border: var(--border);
+    transition: var(--transition);
+}
+
+.message form input:focus,
+.message form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.message form button {
+    padding: var(--spacing);
+    background-color: var(--accent);
+    border-radius: var(--radius);
+    border: none;
+    color: var(--bg-secondary);
+    font-size: 1em;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.message form button:hover {
+    opacity: 0.9;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+    :root {
+        --spacing: 15px;
+    }
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .skeleton-content {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .skeleton-nav-items {
+        display: none;
+    }
+
+    .floatTopBar {
+        width: 90% !important;
+    }
+
+    .topBar {
+        display: none;
+    }
+
+    .section {
+        height: max-content;
+        flex-direction: column;
+    }
+
+    .section:last-child {
+        margin-bottom: 0px;
+    }
+
+    .section img {
+        /*display: none;*/
+        width: 100%;
+    }
+
+    #about,
+    #team {
+        flex-direction: column-reverse;
+    }
+
+    #home img {
+        display: none;
+    }
+
+    .innerSection {
+        width: 100% !important;
+        padding: var(--spacing);
+        height: max-content;
+        overflow-x: auto;
+    }
+
+    .innerSection .card {
+        height: max-content;
+        width: 100%;
+        text-align: center;
+    }
+
+    #home {
+        margin-top: 50px;
+        margin-bottom: 100px;
+    }
+
+    #home .innerSection .card,
+    #clients .innerSection .card,
+    #about .innerSection .card {
+        margin: 0;
+    }
+
+    .labelCards {
+        align-items: center;
+        justify-content: center;
+    }
+
+    #about .innerSection .card span,
+    #why .innerSection .card span {
+        text-align: left;
+    }
+
+    #services .cardsWrapper {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    #clients .card {
+        width: 100% !important;
+    }
+
+    #team .innerSection .card {
+        margin-left: 0px;
+    }
+
+    #team {
+        padding-bottom: 100px;
+    }
+
+    #services .label h1 {
+        font-size: 2.5em;
+    }
+
+    #services .label {
+        width: 90%;
+    }
+
+    #services {
+        padding-bottom: 0px;
+    }
+
+    .servCard {
+        width: 100%;
+    }
+
+    #about .innerSection .card h1 {
+        font-size: 2.5em;
+    }
+
+    .card {
+        justify-content: center;
+        align-items: center;
+    }
+
+    #contacts .innerSection {
+        height: max-content;
+    }
+
+    #contacts .innerSection .card {
+        flex-wrap: wrap;
+        height: max-content;
+        padding: 0;
+    }
+
+    #contacts .innerSection .card .adress,
+    #contacts .innerSection .card .message {
+        width: 100%;
+    }
+
+    #contacts .innerSection .card .adress {
+        border-right: none;
+        text-align: left;
+    }
+
+    .social-buttons a img {
+        width: 50px;
+        display: unset;
+    }
+
+    .adressCard div {
+        text-align: left;
+        width: 100%;
+    }
+
+    .adressCard img {
+        display: none;
+    }
+
+    .adressCard {
+        padding: 0;
+    }
+
+    .message form {
+        width: 100%;
+    }
+
+    #team {
+        margin: 0px !important;
+    }
+
+    .software .cardsWrapper .card {
+        width: 100%;
+    }
+
+    #clients .innerSection .card h1 {
+        font-size: 2.5em;
+    }
+
+    .software .cardsWrapper {
+        padding: 0px;
+    }
+
+}
