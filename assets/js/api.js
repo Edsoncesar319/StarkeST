@@ -7,11 +7,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitButton = form.querySelector('button[type="submit"]');
 
     function getApiBaseUrl() {
+        // Prefer explicit runtime config set in HTML
+        if (window.__API_BASE_URL__ && typeof window.__API_BASE_URL__ === 'string') {
+            return window.__API_BASE_URL__;
+        }
+        // Fallback to <meta name="api-base-url" content="..."> if present
+        const metaTag = document.querySelector('meta[name="api-base-url"][content]');
+        if (metaTag && metaTag.getAttribute('content')) {
+            return metaTag.getAttribute('content');
+        }
+        // Local development default
         const host = window.location.hostname;
         if (host === 'localhost' || host === '127.0.0.1') {
             return 'http://localhost:5000';
         }
-        return '';
+        // Production MUST be configured; throw explicit error to aid debugging
+        throw new Error('API base URL não configurado. Defina window.__API_BASE_URL__ ou meta[name="api-base-url"].');
     }
 
     function setSubmitting(isSubmitting) {
@@ -56,7 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
             form.reset();
         } catch (error) {
             console.error(error);
-            alert('Não foi possível enviar sua mensagem. Tente novamente mais tarde.');
+            const msg = error && error.message ? error.message : 'Não foi possível enviar sua mensagem. Tente novamente mais tarde.';
+            alert(msg);
         } finally {
             setSubmitting(false);
         }
@@ -71,11 +83,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitBtn = budgetForm ? budgetForm.querySelector('button[type="submit"]') : null;
 
     function getApiBaseUrl() {
+        if (window.__API_BASE_URL__ && typeof window.__API_BASE_URL__ === 'string') {
+            return window.__API_BASE_URL__;
+        }
+        const metaTag = document.querySelector('meta[name="api-base-url"][content]');
+        if (metaTag && metaTag.getAttribute('content')) {
+            return metaTag.getAttribute('content');
+        }
         const host = window.location.hostname;
         if (host === 'localhost' || host === '127.0.0.1') {
             return 'http://localhost:5000';
         }
-        return '';
+        throw new Error('API base URL não configurado. Defina window.__API_BASE_URL__ ou meta[name="api-base-url"].');
     }
 
     function openModal() {
@@ -151,7 +170,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 closeModal();
             } catch (err) {
                 console.error(err);
-                alert('Não foi possível enviar seu orçamento. Tente novamente.');
+                const msg = err && err.message ? err.message : 'Não foi possível enviar seu orçamento. Tente novamente.';
+                alert(msg);
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
