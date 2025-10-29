@@ -66,7 +66,7 @@
                             seu negócio com soluções rápidas e eficientes.</p>
                         <div>
                             <a href="#services" id="ourServices">Nossos Serviços</a>
-                            <a href="#contacts">Solicitar Orçamento</a>
+                            <a href="#orcamento" class="open-budget-modal">Solicitar Orçamento</a>
                         </div>
                         <div class="labelCards">
                             <span><i class="material-icons">check_circle</i>Diagnóstico e Reparo</span>
@@ -112,7 +112,7 @@
                         </div>
                         <div>
                             <a href="#services" id="ourServices">Nossos Serviços</a>
-                            <a href="#contacts">Solicitar Orçamento</a>
+                            <a href="#orcamento" class="open-budget-modal">Solicitar Orçamento</a>
                         </div>
                     </aside>
                 </div>
@@ -138,7 +138,7 @@
                             <li><i class="material-icons">check</i>Reparo de componentes</li>
                             <li><i class="material-icons">check</i>Atualização de sistemas</li>
                         </ul>
-                        <a href="#contacts">Solicitar Serviço <i class="material-icons">arrow_forward</i></a>
+                        <a href="#orcamento" class="open-budget-modal">Solicitar Serviço <i class="material-icons">arrow_forward</i></a>
                     </div>
                     <div class="servCard stagger-item">
                         <div class="img"><i class="material-icons">security</i></div>
@@ -149,7 +149,7 @@
                             <li><i class="material-icons">check</i>Firewall e antivírus</li>
                             <li><i class="material-icons">check</i>Backup em nuvem</li>
                         </ul>
-                        <a href="#contacts">Solicitar Serviço <i class="material-icons">arrow_forward</i></a>
+                        <a href="#orcamento" class="open-budget-modal">Solicitar Serviço <i class="material-icons">arrow_forward</i></a>
                     </div>
                     <div class="servCard stagger-item">
                         <div class="img"><i class="material-icons">settings</i></div>
@@ -161,7 +161,7 @@
                             <li><i class="material-icons">check</i>Atualizações de sistema</li>
                             <li><i class="material-icons">check</i>Otimização de performance</li>
                         </ul>
-                        <a href="#contacts">Solicitar Serviço <i class="material-icons">arrow_forward</i></a>
+                        <a href="#orcamento" class="open-budget-modal">Solicitar Serviço <i class="material-icons">arrow_forward</i></a>
                     </div>
                     <div class="servCard stagger-item">
                         <div class="img"><i class="material-icons">backup</i></div>
@@ -173,7 +173,7 @@
                             <li><i class="material-icons">check</i>Recuperação de dados</li>
                             <li><i class="material-icons">check</i>Armazenamento seguro</li>
                         </ul>
-                        <a href="#contacts">Solicitar Serviço <i class="material-icons">arrow_forward</i></a>
+                        <a href="#orcamento" class="open-budget-modal">Solicitar Serviço <i class="material-icons">arrow_forward</i></a>
                     </div>
                     <div class="servCard stagger-item">
                         <div class="img"><i class="material-icons">wifi</i></div>
@@ -185,7 +185,7 @@
                             <li><i class="material-icons">check</i>Resolução remota</li>
                             <li><i class="material-icons">check</i>Monitoramento</li>
                         </ul>
-                        <a href="#contacts">Solicitar Serviço <i class="material-icons">arrow_forward</i></a>
+                        <a href="#orcamento" class="open-budget-modal">Solicitar Serviço <i class="material-icons">arrow_forward</i></a>
                     </div>
                     <div class="servCard stagger-item">
                         <div class="img"><i class="material-icons">supervisor_account</i></div>
@@ -197,7 +197,7 @@
                             <li><i class="material-icons">check</i>Planejamento estratégico</li>
                             <li><i class="material-icons">check</i>Implementação de soluções</li>
                         </ul>
-                        <a href="#contacts">Solicitar Serviço <i class="material-icons">arrow_forward</i></a>
+                        <a href="#orcamento" class="open-budget-modal">Solicitar Serviço <i class="material-icons">arrow_forward</i></a>
                     </div>
                 </div>
             </section>
@@ -252,7 +252,7 @@
                             qualquer momento.</p>
                         <div>
                             <a href="#services" id="ourServices">Nossos Serviços</a>
-                            <a href="#contacts">Solicitar Orçamento</a>
+                            <a href="#orcamento" class="open-budget-modal">Solicitar Orçamento</a>
                         </div>
                     </aside>
                 </div>
@@ -372,6 +372,49 @@
         </footer>
     </div>
 
+    <!-- Budget Modal -->
+    <div class="modal" id="budgetModal" aria-hidden="true">
+        <div class="modal-backdrop" data-close="budget"></div>
+        <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="budgetTitle">
+            <button class="modal-close" type="button" data-close="budget" aria-label="Fechar">×</button>
+            <h2 id="budgetTitle">Solicitar Orçamento</h2>
+            <form id="budgetForm">
+                <div class="modal-grid">
+                    <label>
+                        Nome
+                        <input type="text" name="name" required>
+                    </label>
+                    <label>
+                        Email
+                        <input type="email" name="email" required>
+                    </label>
+                    <label>
+                        Telefone
+                        <input type="tel" name="phone" required>
+                    </label>
+                    <label>
+                        Cidade
+                        <input type="text" name="city" required>
+                    </label>
+                    <label class="full">
+                        Serviço
+                        <input type="text" name="service" placeholder="Ex.: Manutenção, Backup, Power BI" required>
+                    </label>
+                    <label class="full">
+                        Empresa (opcional)
+                        <input type="text" name="company">
+                    </label>
+                    <label class="full">
+                        Detalhes
+                        <textarea name="details" rows="4" placeholder="Descreva sua necessidade" required></textarea>
+                    </label>
+                </div>
+                <button type="submit" class="modal-submit">Enviar pedido</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="assets/js/api.js"></script>
     <script src="main.js"></script>
 </body>
 
