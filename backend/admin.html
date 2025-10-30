@@ -22,7 +22,7 @@
         .flex { display: flex; gap: 8px; align-items: center; }
     </style>
     <script>
-        const API_BASE = 'http://localhost:5000';
+        const API_BASE = (window.__API_BASE_URL__ || (document.querySelector('meta[name="api-base-url"]')?.getAttribute('content')) || '/api');
         let AUTH_TOKEN = '';
         async function fetchPaged(endpoint, page, pageSize) {
             const res = await fetch(`${API_BASE}${endpoint}?page=${page}&page_size=${pageSize}`, {
