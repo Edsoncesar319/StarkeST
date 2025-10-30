@@ -416,8 +416,22 @@
     </div>
 
     <script>
-        // Base de API para produção/same-origin (Vercel Functions em /api)
-        window.__API_BASE_URL__ = '/api';
+        // Configuração automática da base da API
+        (function() {
+            try {
+                var host = window.location && window.location.hostname;
+                // Em desenvolvimento local, usar a API local
+                if (host === 'localhost' || host === '127.0.0.1') {
+                    window.__API_BASE_URL__ = 'http://localhost:5000';
+                    return;
+                }
+                // Em produção, usar same-origin functions em /api por padrão
+                window.__API_BASE_URL__ = '/api';
+            } catch (e) {
+                // Fallback seguro
+                window.__API_BASE_URL__ = '/api';
+            }
+        })();
     </script>
     <script src="assets/js/api.js"></script>
     <script src="main.js"></script>
