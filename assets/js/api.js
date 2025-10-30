@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (host === 'localhost' || host === '127.0.0.1') {
             return 'http://localhost:5000';
         }
-        // In produção, exigir configuração explícita para evitar chamadas ao mesmo domínio incorretas
-        throw new Error('API base URL não configurado. Defina window.__API_BASE_URL__ ou <meta name="api-base-url" content="https://sua-api">.');
+        // Produção sem configuração explícita: usar same-origin functions
+        return '/api';
     }
 
     function setSubmitting(isSubmitting) {
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (host === 'localhost' || host === '127.0.0.1') {
             return 'http://localhost:5000';
         }
-        throw new Error('API base URL não configurado. Defina window.__API_BASE_URL__ ou <meta name="api-base-url" content="https://sua-api">.');
+        return '/api';
     }
 
     function openModal() {
