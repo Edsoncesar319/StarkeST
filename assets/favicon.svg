@@ -1,11 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
   <defs>
+    <linearGradient id="sGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f8fafc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+    </linearGradient>
+    <filter id="textShadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="0.4"/>
+      <feOffset dx="0" dy="0.6" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
     <style>
-      .bg{fill:#2563EB;}
-      .txt{fill:#ffffff;font-family:Segoe UI, Arial, sans-serif;font-weight:700;}
+      .s-letter{fill:url(#sGradient);font-family:'Arial Black', 'Helvetica Neue', Arial, sans-serif;font-weight:900;font-size:27px;letter-spacing:-0.8px;}
+      .t-letter{fill:#ffffff;font-family:'Arial Black', 'Helvetica Neue', Arial, sans-serif;font-weight:900;font-size:27px;letter-spacing:-0.8px;}
     </style>
   </defs>
-  <circle class="bg" cx="32" cy="32" r="32"/>
-  <text class="txt" x="32" y="38" font-size="28" text-anchor="middle">ST</text>
+  
+  <!-- Blue background -->
+  <rect width="64" height="64" fill="#2563EB"/>
+  
+  <!-- Thick curved crescent wrapping around right side of T -->
+  <!-- Smooth curved arc using Bezier curves - lighter blue for contrast -->
+  <path d="M 43 7 
+           C 47 5, 53 9, 55 19
+           C 57 29, 55 39, 49 43
+           C 47 45, 43 47, 39 47
+           C 35 47, 31 45, 29 43
+           C 23 39, 21 29, 23 19
+           C 25 9, 31 7, 35 7
+           C 39 7, 43 7, 43 7 Z" 
+        fill="#3b82f6" 
+        opacity="0.85"/>
+  
+  <!-- Inner cutout to create perfect crescent -->
+  <path d="M 39 11 
+           C 41 9, 43 11, 45 17
+           C 47 23, 47 29, 45 33
+           C 43 37, 41 39, 39 41
+           C 37 43, 35 41, 33 37
+           C 31 33, 31 27, 33 21
+           C 35 15, 37 13, 39 11 Z" 
+        fill="#2563EB"/>
+  
+  <!-- Letter S (white with subtle gradient) - centered -->
+  <text class="s-letter" x="18" y="29.5" font-size="27" filter="url(#textShadow)">S</text>
+  
+  <!-- Letter T (white, overlapping S slightly to the right) - centered -->
+  <text class="t-letter" x="34" y="29.5" font-size="27" filter="url(#textShadow)">T</text>
 </svg>
-
