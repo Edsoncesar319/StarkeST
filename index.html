@@ -223,23 +223,58 @@
                     <div class="card stagger-item">
                         <i class="material-icons">dashboard</i>
                         <h2>Sistemas de Gestão (ERP)</h2>
-                        <p>Plataformas integradas para controle de estoque, vendas, finanças e relatórios estratégicos.
-                        </p>
+                        <p>Controle total de estoque, vendas e finanças em uma única plataforma.</p>
+                        <div class="popup-details" style="display:none;">
+                            <p>Plataformas integradas que centralizam estoque, vendas, finanças e relatórios estratégicos, automatizando fluxos e oferecendo uma visão completa do desempenho empresarial.</p>
+                            <ul>
+                                <li>Reduz erros e aumenta a eficiência</li>
+                                <li>Gera relatórios inteligentes e personalizados</li>
+                                <li>Facilita decisões com dados em tempo real</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="card stagger-item">
                         <i class="material-icons">devices</i>
                         <h2>Aplicativos Web e Mobile</h2>
                         <p>Apps modernos e intuitivos para Android, iOS ou Web, com foco na experiência do usuário.</p>
+                        <div class="popup-details" style="display:none;">
+                            <p>Desenvolvimento de aplicativos rápidos, seguros e responsivos, preparados para múltiplas plataformas e cenários de uso.</p>
+                            <ul>
+                                <li>Acesso em qualquer lugar: disponíveis em múltiplas plataformas e dispositivos.</li>
+                                <li>Alto desempenho: carregamento rápido e operação otimizada.</li>
+                                <li>Design responsivo: adaptação automática a telas de diferentes tamanhos.</li>
+                                <li>Segurança: uso de autenticação e criptografia para proteção de dados.</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="card stagger-item">
                         <i class="material-icons">link</i>
                         <h2>Integrações & Automação</h2>
                         <p>Integrações com APIs, dashboards inteligentes (Power BI) e automação de processos.</p>
+                        <div class="popup-details" style="display:none;">
+                            <p>Conectamos sistemas e automatizamos fluxos para eliminar retrabalho, acelerar decisões e aumentar a eficiência operacional.</p>
+                            <ul>
+                                <li>Fluxo de dados unificado: elimina retrabalho e inconsistências entre sistemas.</li>
+                                <li>Processos automatizados: reduz tarefas manuais e aumenta a produtividade.</li>
+                                <li>Agilidade operacional: decisões mais rápidas com informações em tempo real.</li>
+                                <li>Maior eficiência: otimiza recursos e reduz custos operacionais.</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="card stagger-item">
                         <i class="material-icons">security</i>
                         <h2>Segurança & Escalabilidade</h2>
                         <p>Projetos seguros, com LGPD, performance elevada e prontos para o crescimento.</p>
+                        <div class="popup-details" style="display:none;">
+                            <p>Soluções projetadas com foco em segurança de ponta e crescimento sustentável, garantindo estabilidade e proteção em qualquer escala.</p>
+                            <ul>
+                                <li>Proteção avançada de dados: uso de criptografia, autenticação e controle de acesso.</li>
+                                <li>Prevenção contra vulnerabilidades: monitoramento contínuo e atualizações automáticas.</li>
+                                <li>Gestão de permissões: definição de perfis e níveis de acesso para cada usuário.</li>
+                                <li>Infraestrutura escalável: adaptação automática à demanda sem perda de desempenho.</li>
+                                <li>Alta disponibilidade: sistemas estáveis e sempre acessíveis, mesmo em picos de uso.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -412,6 +447,17 @@
                 </div>
                 <button type="submit" class="modal-submit">Enviar pedido</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Service Info Modal -->
+    <div class="modal" id="serviceInfoModal" aria-hidden="true">
+        <div class="modal-backdrop" data-close="service"></div>
+        <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="serviceInfoTitle">
+            <button class="modal-close" type="button" data-close="service" aria-label="Fechar">×</button>
+            <h2 id="serviceInfoTitle">Serviço</h2>
+            <div id="serviceInfoContent"></div>
+            <button id="serviceInfoCTA" class="modal-submit" type="button">Solicitar Serviço</button>
         </div>
     </div>
 

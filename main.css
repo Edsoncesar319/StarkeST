@@ -835,6 +835,11 @@ footer {
 
 .modal h2 {
     margin-bottom: calc(var(--spacing) + 5px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid rgba(37, 99, 235, 0.15);
+    padding-bottom: 8px;
 }
 
 .modal-grid {
@@ -871,6 +876,57 @@ footer {
     border: none;
     border-radius: var(--radius);
     cursor: pointer;
+}
+
+/* Service Info Modal content styling */
+#serviceInfoModal .modal-dialog {
+    width: min(640px, 92%);
+}
+
+#serviceInfoContent p {
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+#serviceInfoContent ul {
+    list-style: none;
+    margin: 10px 0 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+
+@media (min-width: 768px) {
+    #serviceInfoContent ul {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+#serviceInfoContent ul li {
+    position: relative;
+    padding-left: 28px;
+    color: var(--text-primary);
+}
+
+#serviceInfoContent ul li::before {
+    content: "\2713"; /* checkmark */
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: var(--accent);
+    border-radius: 6px;
+    font-size: 0.85em;
+}
+
+#serviceInfoCTA {
+    margin-top: 16px;
 }
 
 /* ========== Responsive ========== */

@@ -183,3 +183,85 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Modal de informação de serviços (seção Clientes -> cards de software)
+    const serviceIcons = document.querySelectorAll('.software .cardsWrapper .card i.material-icons');
+    const modal = document.getElementById('serviceInfoModal');
+    const titleEl = document.getElementById('serviceInfoTitle');
+    const contentEl = document.getElementById('serviceInfoContent');
+    const closeEls = modal ? modal.querySelectorAll('[data-close="service"]') : [];
+    const ctaBtn = document.getElementById('serviceInfoCTA');
+
+    if (!serviceIcons.length || !modal || !titleEl || !contentEl) return;
+
+    function openModal() {
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    serviceIcons.forEach(icon => {
+        icon.style.cursor = 'pointer';
+        icon.addEventListener('click', (e) => {
+            e.preventDefault();
+            const card = icon.closest('.card');
+            const title = card?.querySelector('h2')?.textContent?.trim() || 'Serviço';
+            const desc = card?.querySelector('p')?.textContent?.trim() || '';
+            const detailsEl = card?.querySelector('.popup-details');
+            const iconName = card?.querySelector('i.material-icons')?.textContent?.trim() || '';
+
+            // Título com ícone para manter padrão visual
+            if (iconName) {
+                titleEl.innerHTML = `<i class="material-icons">${iconName}</i>${title}`;
+            } else {
+                titleEl.textContent = title;
+            }
+            if (detailsEl) {
+                contentEl.innerHTML = detailsEl.innerHTML;
+            } else {
+                contentEl.innerHTML = '';
+                const p = document.createElement('p');
+                p.textContent = desc;
+                contentEl.appendChild(p);
+            }
+
+            // Guardar nome do serviço para CTA
+            if (ctaBtn) {
+                ctaBtn.dataset.serviceName = title;
+            }
+
+            openModal();
+        });
+    });
+
+    closeEls.forEach(el => el.addEventListener('click', closeModal));
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    // CTA: abre modal de orçamento já com o serviço preenchido
+    if (ctaBtn) {
+        ctaBtn.addEventListener('click', () => {
+            const serviceName = ctaBtn.dataset.serviceName || '';
+            closeModal();
+
+            const budgetModal = document.getElementById('budgetModal');
+            const serviceInput = document.querySelector('#budgetForm input[name="service"]');
+            if (serviceInput && serviceName) {
+                serviceInput.value = serviceName;
+            }
+            if (budgetModal) {
+                budgetModal.classList.add('show');
+                budgetModal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    }
+});
+
