@@ -100,18 +100,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitBtn = budgetForm ? budgetForm.querySelector('button[type="submit"]') : null;
 
     function getApiBaseUrl() {
+        let baseUrl = null;
+        
         if (window.__API_BASE_URL__ && typeof window.__API_BASE_URL__ === 'string') {
-            return window.__API_BASE_URL__;
+            baseUrl = window.__API_BASE_URL__;
+        } else {
+            const metaTag = document.querySelector('meta[name="api-base-url"][content]');
+            if (metaTag && metaTag.getAttribute('content')) {
+                baseUrl = metaTag.getAttribute('content');
+            } else {
+                const host = window.location.hostname;
+                if (host === 'localhost' || host === '127.0.0.1') {
+                    baseUrl = 'http://localhost:5000';
+                }
+            }
         }
-        const metaTag = document.querySelector('meta[name="api-base-url"][content]');
-        if (metaTag && metaTag.getAttribute('content')) {
-            return metaTag.getAttribute('content');
+        
+        if (!baseUrl) {
+            throw new Error('API base URL não configurado. Defina window.__API_BASE_URL__ ou <meta name="api-base-url" content="https://sua-api">.');
         }
-        const host = window.location.hostname;
-        if (host === 'localhost' || host === '127.0.0.1') {
-            return 'http://localhost:5000';
+        
+        // Remove trailing slash if present
+        baseUrl = baseUrl.replace(/\/+$/, '');
+        
+        // Validate URL format
+        try {
+            new URL(baseUrl);
+        } catch (e) {
+            throw new Error(`URL da API inválida: ${baseUrl}`);
         }
-        throw new Error('API base URL não configurado. Defina window.__API_BASE_URL__ ou <meta name="api-base-url" content="https://sua-api">.');
+        
+        return baseUrl;
     }
 
     function openModal() {
@@ -170,16 +189,35 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
-                const res = await fetch(getApiBaseUrl() + '/api/budgets', {
+                let apiUrl;
+                try {
+                    apiUrl = getApiBaseUrl() + '/api/budgets';
+                } catch (configError) {
+                    console.error('Erro de configuração da API:', configError);
+                    alert('Erro de configuração: ' + (configError.message || 'URL da API não configurada corretamente.'));
+                    return;
+                }
+                
+                console.log('Enviando orçamento para:', apiUrl);
+                console.log('Payload:', payload);
+                
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 segundos de timeout
+                
+                const res = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(payload),
+                    signal: controller.signal
                 });
+                
+                clearTimeout(timeoutId);
+                
                 if (!res.ok) {
-                    let errorMessage = `Erro ao enviar (HTTP ${res.status})`;
+                    let errorMessage = `Erro ao enviar orçamento (HTTP ${res.status})`;
                     try {
                         const errData = await res.json();
                         if (errData && typeof errData === 'object' && errData.error) {
@@ -192,19 +230,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     throw new Error(errorMessage);
                 }
+                
                 alert('Orçamento enviado com sucesso!');
                 budgetForm.reset();
                 closeModal();
             } catch (err) {
                 console.error('Erro ao enviar orçamento:', err);
-                let msg = 'Não foi possível enviar seu orçamento. Tente novamente.';
-                if (err instanceof Error) {
-                    msg = err.message || msg;
+                console.error('Detalhes do erro:', {
+                    name: err.name,
+                    message: err.message,
+                    stack: err.stack
+                });
+                
+                let msg = 'Não foi possível enviar seu orçamento. ';
+                
+                if (err instanceof TypeError && err.message.includes('Failed to fetch')) {
+                    msg += 'Verifique sua conexão com a internet ou tente novamente mais tarde.';
+                    console.error('Possíveis causas: API offline, problema de CORS, ou URL incorreta.');
+                } else if (err.name === 'AbortError') {
+                    msg += 'A requisição demorou muito. Tente novamente.';
+                } else if (err instanceof Error) {
+                    msg += err.message || 'Tente novamente mais tarde.';
                 } else if (typeof err === 'string') {
-                    msg = err;
+                    msg += err;
                 } else if (err && typeof err === 'object' && err.message) {
-                    msg = err.message;
+                    msg += err.message;
+                } else {
+                    msg += 'Tente novamente mais tarde.';
                 }
+                
                 alert(msg);
             } finally {
                 if (submitBtn) {
