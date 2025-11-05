@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="api-base-url" content="/api">
+    <meta name="api-base-url" content="https://api-stake-e3pom59ld-edson-cesars-projects.vercel.app">
     <title>Starke ST - Soluções Tecnológicas Completas</title>
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="stylesheet" href="main.css">
@@ -473,11 +473,11 @@
                     window.__API_BASE_URL__ = 'http://localhost:5000';
                     return;
                 }
-                // Em produção, usar same-origin functions em /api por padrão
-                window.__API_BASE_URL__ = '/api';
+                // Em produção, usar a API do Vercel
+                window.__API_BASE_URL__ = 'https://api-stake-e3pom59ld-edson-cesars-projects.vercel.app';
             } catch (e) {
                 // Fallback seguro
-                window.__API_BASE_URL__ = '/api';
+                window.__API_BASE_URL__ = 'https://api-stake-e3pom59ld-edson-cesars-projects.vercel.app';
             }
         })();
     </script>
