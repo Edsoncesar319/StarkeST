@@ -7,22 +7,40 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitButton = form.querySelector('button[type="submit"]');
 
     function getApiBaseUrl() {
+        let baseUrl = null;
+        
         // Prefer explicit runtime config set in HTML
         if (window.__API_BASE_URL__ && typeof window.__API_BASE_URL__ === 'string') {
-            return window.__API_BASE_URL__;
+            baseUrl = window.__API_BASE_URL__;
+        } else {
+            // Fallback to <meta name="api-base-url" content="..."> if present
+            const metaTag = document.querySelector('meta[name="api-base-url"][content]');
+            if (metaTag && metaTag.getAttribute('content')) {
+                baseUrl = metaTag.getAttribute('content');
+            } else {
+                // Local development default
+                const host = window.location.hostname;
+                if (host === 'localhost' || host === '127.0.0.1') {
+                    baseUrl = 'http://localhost:5000';
+                }
+            }
         }
-        // Fallback to <meta name="api-base-url" content="..."> if present
-        const metaTag = document.querySelector('meta[name="api-base-url"][content]');
-        if (metaTag && metaTag.getAttribute('content')) {
-            return metaTag.getAttribute('content');
+        
+        if (!baseUrl) {
+            throw new Error('API base URL não configurado. Defina window.__API_BASE_URL__ ou <meta name="api-base-url" content="https://sua-api">.');
         }
-        // Local development default
-        const host = window.location.hostname;
-        if (host === 'localhost' || host === '127.0.0.1') {
-            return 'http://localhost:5000';
+        
+        // Remove trailing slash if present
+        baseUrl = baseUrl.replace(/\/+$/, '');
+        
+        // Validate URL format
+        try {
+            new URL(baseUrl);
+        } catch (e) {
+            throw new Error(`URL da API inválida: ${baseUrl}`);
         }
-        // In produção, exigir configuração explícita para evitar chamadas ao mesmo domínio incorretas
-        throw new Error('API base URL não configurado. Defina window.__API_BASE_URL__ ou <meta name="api-base-url" content="https://sua-api">.');
+        
+        return baseUrl;
     }
 
     function setSubmitting(isSubmitting) {
@@ -49,17 +67,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
         setSubmitting(true);
         try {
-            const res = await fetch(getApiBaseUrl() + '/api/messages', {
+            let apiUrl;
+            try {
+                apiUrl = getApiBaseUrl() + '/api/messages';
+            } catch (configError) {
+                console.error('Erro de configuração da API:', configError);
+                alert('Erro de configuração: ' + (configError.message || 'URL da API não configurada corretamente.'));
+                setSubmitting(false);
+                return;
+            }
+            
+            console.log('Enviando mensagem para:', apiUrl);
+            console.log('Payload:', payload);
+            
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 segundos de timeout
+            
+            const res = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
 
             if (!res.ok) {
-                let errorMessage = `Erro ao enviar (HTTP ${res.status})`;
+                let errorMessage = `Erro ao enviar mensagem (HTTP ${res.status})`;
                 try {
                     const errData = await res.json();
                     if (errData && typeof errData === 'object' && errData.error) {
@@ -77,14 +114,29 @@ document.addEventListener('DOMContentLoaded', function() {
             form.reset();
         } catch (error) {
             console.error('Erro ao enviar mensagem:', error);
-            let msg = 'Não foi possível enviar sua mensagem. Tente novamente mais tarde.';
-            if (error instanceof Error) {
-                msg = error.message || msg;
+            console.error('Detalhes do erro:', {
+                name: error.name,
+                message: error.message,
+                stack: error.stack
+            });
+            
+            let msg = 'Não foi possível enviar sua mensagem. ';
+            
+            if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+                msg += 'Verifique sua conexão com a internet ou tente novamente mais tarde.';
+                console.error('Possíveis causas: API offline, problema de CORS, ou URL incorreta.');
+            } else if (error.name === 'AbortError') {
+                msg += 'A requisição demorou muito. Tente novamente.';
+            } else if (error instanceof Error) {
+                msg += error.message || 'Tente novamente mais tarde.';
             } else if (typeof error === 'string') {
-                msg = error;
+                msg += error;
             } else if (error && typeof error === 'object' && error.message) {
-                msg = error.message;
+                msg += error.message;
+            } else {
+                msg += 'Tente novamente mais tarde.';
             }
+            
             alert(msg);
         } finally {
             setSubmitting(false);
