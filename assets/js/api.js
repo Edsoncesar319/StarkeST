@@ -59,15 +59,32 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             if (!res.ok) {
-                const err = await res.json().catch(() => ({}));
-                throw new Error(err.error || `Erro ao enviar (HTTP ${res.status})`);
+                let errorMessage = `Erro ao enviar (HTTP ${res.status})`;
+                try {
+                    const errData = await res.json();
+                    if (errData && typeof errData === 'object' && errData.error) {
+                        errorMessage = errData.error;
+                    } else if (typeof errData === 'string') {
+                        errorMessage = errData;
+                    }
+                } catch (e) {
+                    // Se não conseguir parsear JSON, usa a mensagem padrão
+                }
+                throw new Error(errorMessage);
             }
 
             alert('Mensagem enviada com sucesso!');
             form.reset();
         } catch (error) {
-            console.error(error);
-            const msg = error && error.message ? error.message : 'Não foi possível enviar sua mensagem. Tente novamente mais tarde.';
+            console.error('Erro ao enviar mensagem:', error);
+            let msg = 'Não foi possível enviar sua mensagem. Tente novamente mais tarde.';
+            if (error instanceof Error) {
+                msg = error.message || msg;
+            } else if (typeof error === 'string') {
+                msg = error;
+            } else if (error && typeof error === 'object' && error.message) {
+                msg = error.message;
+            }
             alert(msg);
         } finally {
             setSubmitting(false);
@@ -162,15 +179,32 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify(payload)
                 });
                 if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    throw new Error(err.error || `Erro ao enviar (HTTP ${res.status})`);
+                    let errorMessage = `Erro ao enviar (HTTP ${res.status})`;
+                    try {
+                        const errData = await res.json();
+                        if (errData && typeof errData === 'object' && errData.error) {
+                            errorMessage = errData.error;
+                        } else if (typeof errData === 'string') {
+                            errorMessage = errData;
+                        }
+                    } catch (e) {
+                        // Se não conseguir parsear JSON, usa a mensagem padrão
+                    }
+                    throw new Error(errorMessage);
                 }
                 alert('Orçamento enviado com sucesso!');
                 budgetForm.reset();
                 closeModal();
             } catch (err) {
-                console.error(err);
-                const msg = err && err.message ? err.message : 'Não foi possível enviar seu orçamento. Tente novamente.';
+                console.error('Erro ao enviar orçamento:', err);
+                let msg = 'Não foi possível enviar seu orçamento. Tente novamente.';
+                if (err instanceof Error) {
+                    msg = err.message || msg;
+                } else if (typeof err === 'string') {
+                    msg = err;
+                } else if (err && typeof err === 'object' && err.message) {
+                    msg = err.message;
+                }
                 alert(msg);
             } finally {
                 if (submitBtn) {

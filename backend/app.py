@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, g
 from flask_cors import CORS
 import sqlite3
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 import secrets
 
 DB_PATH = os.path.join(os.path.dirname(__file__), 'database.sqlite3')
@@ -113,7 +113,7 @@ def create_app():
                 data['email'].strip(),
                 data['subject'].strip(),
                 data['message'].strip(),
-                datetime.utcnow().isoformat()
+                datetime.now(timezone.utc).isoformat()
             )
         )
         db.commit()
@@ -160,7 +160,7 @@ def create_app():
                 data['details'].strip(),
                 (data.get('company') or '').strip(),
                 data['city'].strip(),
-                datetime.utcnow().isoformat()
+                datetime.now(timezone.utc).isoformat()
             )
         )
         db.commit()
