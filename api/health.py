@@ -1,17 +1,23 @@
-from http.server import BaseHTTPRequestHandler
 import json
 
-class handler(BaseHTTPRequestHandler):
-    def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.end_headers()
+def handler(request):
+    """Handler para Vercel serverless functions"""
+    headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Content-Type': 'application/json'
+    }
     
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.end_headers()
-        self.wfile.write(json.dumps({ 'status': 'ok' }).encode())
+    if request.method == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': ''
+        }
+    
+    return {
+        'statusCode': 200,
+        'headers': headers,
+        'body': json.dumps({ 'status': 'ok' })
+    }

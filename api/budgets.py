@@ -1,9 +1,7 @@
-from http.server import BaseHTTPRequestHandler
 import json
 import sqlite3
 import os
 from datetime import datetime, timezone
-from urllib.parse import urlparse, parse_qs
 
 # Database will be stored in /tmp for Vercel serverless functions
 DB_PATH = os.path.join('/tmp', 'database.sqlite3')
@@ -35,95 +33,146 @@ def init_db():
     finally:
         db.close()
 
-class handler(BaseHTTPRequestHandler):
-    def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-        self.end_headers()
-    
-    def do_POST(self):
-        try:
+def handler(request):
+    """Handler para Vercel serverless functions"""
+    try:
+        # Configurar CORS headers
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Content-Type': 'application/json'
+        }
+        
+        # Obter método HTTP
+        method = getattr(request, 'method', 'GET')
+        if hasattr(request, 'httpMethod'):
+            method = request.httpMethod
+        
+        # Tratar OPTIONS (preflight CORS)
+        if method == 'OPTIONS':
+            return {
+                'statusCode': 200,
+                'headers': headers,
+                'body': ''
+            }
+        
+        # Tratar POST
+        if method == 'POST':
             init_db()
-            content_length = int(self.headers.get('Content-Length', 0))
-            body = self.rfile.read(content_length)
-            data = json.loads(body.decode('utf-8')) if body else {}
+            
+            # Obter body
+            body = getattr(request, 'body', None)
+            if hasattr(request, 'json'):
+                data = request.json
+            elif isinstance(body, str):
+                data = json.loads(body) if body else {}
+            elif isinstance(body, bytes):
+                data = json.loads(body.decode('utf-8')) if body else {}
+            elif body:
+                data = body
+            else:
+                # Tentar ler do body de outra forma
+                if hasattr(request, 'get_json'):
+                    data = request.get_json(force=True, silent=True) or {}
+                else:
+                    data = {}
             
             required = ['name', 'email', 'phone', 'service', 'details', 'city']
             missing = [f for f in required if not data.get(f)]
             if missing:
-                self.send_response(400)
-                self.send_header('Content-Type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({ 'error': f'Campos ausentes: {", ".join(missing)}' }).encode())
-                return
+                return {
+                    'statusCode': 400,
+                    'headers': headers,
+                    'body': json.dumps({ 'error': f'Campos ausentes: {", ".join(missing)}' })
+                }
 
             db = get_db()
-            db.execute(
-                'INSERT INTO budgets (name, email, phone, service, details, company, city, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                (
-                    data['name'].strip(),
-                    data['email'].strip(),
-                    data['phone'].strip(),
-                    data['service'].strip(),
-                    data['details'].strip(),
-                    (data.get('company') or '').strip(),
-                    data['city'].strip(),
-                    datetime.now(timezone.utc).isoformat()
+            try:
+                db.execute(
+                    'INSERT INTO budgets (name, email, phone, service, details, company, city, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                    (
+                        str(data['name']).strip(),
+                        str(data['email']).strip(),
+                        str(data['phone']).strip(),
+                        str(data['service']).strip(),
+                        str(data['details']).strip(),
+                        str(data.get('company') or '').strip(),
+                        str(data['city']).strip(),
+                        datetime.now(timezone.utc).isoformat()
+                    )
                 )
-            )
-            db.commit()
-            db.close()
+                db.commit()
+            finally:
+                db.close()
             
-            self.send_response(201)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps({ 'success': True }).encode())
-        except Exception as e:
-            print(f"Erro ao criar orçamento: {e}")
-            import traceback
-            traceback.print_exc()
-            self.send_response(500)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps({ 'error': 'Erro interno do servidor' }).encode())
-    
-    def do_GET(self):
-        try:
+            return {
+                'statusCode': 201,
+                'headers': headers,
+                'body': json.dumps({ 'success': True })
+            }
+        
+        # Tratar GET
+        if method == 'GET':
             init_db()
-            parsed_path = urlparse(self.path)
-            query_params = parse_qs(parsed_path.query)
+            query_params = {}
             
-            page = int(query_params.get('page', ['1'])[0])
-            page_size = int(query_params.get('page_size', ['10'])[0])
+            if hasattr(request, 'query'):
+                query_params = request.query or {}
+            elif hasattr(request, 'args'):
+                query_params = request.args or {}
+            
+            page = 1
+            page_size = 10
+            
+            if isinstance(query_params, dict):
+                page = int(query_params.get('page', 1))
+                page_size = int(query_params.get('page_size', 10))
+            elif isinstance(query_params.get('page'), list):
+                page = int(query_params.get('page', ['1'])[0])
+                page_size = int(query_params.get('page_size', ['10'])[0])
+            
             page = max(page, 1)
             page_size = max(min(page_size, 100), 1)
 
             offset = (page - 1) * page_size
             db = get_db()
-            total = db.execute('SELECT COUNT(1) as c FROM budgets').fetchone()['c']
-            rows = db.execute(
-                'SELECT id, name, email, phone, service, details, company, city, created_at FROM budgets ORDER BY datetime(created_at) DESC LIMIT ? OFFSET ?',
-                (page_size, offset)
-            ).fetchall()
-            items = [dict(r) for r in rows]
-            db.close()
+            try:
+                total = db.execute('SELECT COUNT(1) as c FROM budgets').fetchone()['c']
+                rows = db.execute(
+                    'SELECT id, name, email, phone, service, details, company, city, created_at FROM budgets ORDER BY datetime(created_at) DESC LIMIT ? OFFSET ?',
+                    (page_size, offset)
+                ).fetchall()
+                items = [dict(r) for r in rows]
+            finally:
+                db.close()
             
-            self.send_response(200)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps({ 'items': items, 'total': total, 'page': page, 'page_size': page_size }).encode())
-        except Exception as e:
-            print(f"Erro ao listar orçamentos: {e}")
-            import traceback
-            traceback.print_exc()
-            self.send_response(500)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps({ 'error': 'Erro interno do servidor' }).encode())
+            return {
+                'statusCode': 200,
+                'headers': headers,
+                'body': json.dumps({ 'items': items, 'total': total, 'page': page, 'page_size': page_size })
+            }
+        
+        # Método não suportado
+        return {
+            'statusCode': 405,
+            'headers': headers,
+            'body': json.dumps({ 'error': 'Método não permitido' })
+        }
+        
+    except json.JSONDecodeError as e:
+        print(f"Erro ao decodificar JSON: {e}")
+        return {
+            'statusCode': 400,
+            'headers': headers,
+            'body': json.dumps({ 'error': 'JSON inválido' })
+        }
+    except Exception as e:
+        print(f"Erro: {e}")
+        import traceback
+        traceback.print_exc()
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({ 'error': 'Erro interno do servidor', 'details': str(e) })
+        }
