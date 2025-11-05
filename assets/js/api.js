@@ -1,3 +1,89 @@
+// Função compartilhada para obter a URL base da API
+function getApiBaseUrl() {
+    let baseUrl = null;
+    
+    // Prefer explicit runtime config set in HTML
+    if (window.__API_BASE_URL__ && typeof window.__API_BASE_URL__ === 'string') {
+        baseUrl = window.__API_BASE_URL__;
+    } else {
+        // Fallback to <meta name="api-base-url" content="..."> if present
+        const metaTag = document.querySelector('meta[name="api-base-url"][content]');
+        if (metaTag && metaTag.getAttribute('content')) {
+            baseUrl = metaTag.getAttribute('content');
+        } else {
+            // Local development default
+            const host = window.location.hostname;
+            if (host === 'localhost' || host === '127.0.0.1') {
+                baseUrl = 'http://localhost:5000';
+            }
+        }
+    }
+    
+    if (!baseUrl) {
+        throw new Error('API base URL não configurado. Defina window.__API_BASE_URL__ ou <meta name="api-base-url" content="https://sua-api">.');
+    }
+    
+    // Remove trailing slash if present
+    baseUrl = baseUrl.replace(/\/+$/, '');
+    
+    // Validate URL format
+    try {
+        new URL(baseUrl);
+    } catch (e) {
+        throw new Error(`URL da API inválida: ${baseUrl}`);
+    }
+    
+    return baseUrl;
+}
+
+// Função para diagnosticar erros de fetch
+function diagnoseFetchError(error, url) {
+    const diagnosis = {
+        url: url,
+        errorType: 'unknown',
+        possibleCauses: [],
+        suggestion: ''
+    };
+    
+    if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+        diagnosis.errorType = 'network_error';
+        diagnosis.possibleCauses = [
+            'API não está acessível ou offline',
+            'Problema de CORS (Cross-Origin Resource Sharing)',
+            'URL da API incorreta ou não existe',
+            'Problema de conectividade de rede',
+            'Firewall ou proxy bloqueando a requisição'
+        ];
+        
+        // Tentar identificar se é CORS
+        try {
+            const currentOrigin = window.location.origin;
+            if (url && url !== 'URL desconhecida') {
+                const apiOrigin = new URL(url).origin;
+                if (currentOrigin !== apiOrigin) {
+                    diagnosis.suggestion = `A requisição está sendo feita de ${currentOrigin} para ${apiOrigin}. Verifique se o servidor permite requisições CORS deste domínio.`;
+                } else {
+                    diagnosis.suggestion = 'Verifique se a API está rodando e acessível.';
+                }
+            } else {
+                diagnosis.suggestion = 'Verifique se a API está rodando e acessível.';
+            }
+        } catch (e) {
+            diagnosis.suggestion = 'Verifique se a API está rodando e acessível.';
+        }
+    } else if (error.name === 'AbortError') {
+        diagnosis.errorType = 'timeout';
+        diagnosis.possibleCauses = ['A requisição demorou mais de 30 segundos'];
+        diagnosis.suggestion = 'A API pode estar lenta ou sobrecarregada. Tente novamente.';
+    } else {
+        diagnosis.errorType = error.name || 'unknown';
+        diagnosis.possibleCauses = ['Erro desconhecido'];
+        diagnosis.suggestion = 'Verifique o console para mais detalhes.';
+    }
+    
+    return diagnosis;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const contactsSection = document.querySelector('#contacts');
     if (!contactsSection) return;
@@ -5,43 +91,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!form) return;
 
     const submitButton = form.querySelector('button[type="submit"]');
-
-    function getApiBaseUrl() {
-        let baseUrl = null;
-        
-        // Prefer explicit runtime config set in HTML
-        if (window.__API_BASE_URL__ && typeof window.__API_BASE_URL__ === 'string') {
-            baseUrl = window.__API_BASE_URL__;
-        } else {
-            // Fallback to <meta name="api-base-url" content="..."> if present
-            const metaTag = document.querySelector('meta[name="api-base-url"][content]');
-            if (metaTag && metaTag.getAttribute('content')) {
-                baseUrl = metaTag.getAttribute('content');
-            } else {
-                // Local development default
-                const host = window.location.hostname;
-                if (host === 'localhost' || host === '127.0.0.1') {
-                    baseUrl = 'http://localhost:5000';
-                }
-            }
-        }
-        
-        if (!baseUrl) {
-            throw new Error('API base URL não configurado. Defina window.__API_BASE_URL__ ou <meta name="api-base-url" content="https://sua-api">.');
-        }
-        
-        // Remove trailing slash if present
-        baseUrl = baseUrl.replace(/\/+$/, '');
-        
-        // Validate URL format
-        try {
-            new URL(baseUrl);
-        } catch (e) {
-            throw new Error(`URL da API inválida: ${baseUrl}`);
-        }
-        
-        return baseUrl;
-    }
 
     function setSubmitting(isSubmitting) {
         if (submitButton) {
@@ -114,17 +163,40 @@ document.addEventListener('DOMContentLoaded', function() {
             form.reset();
         } catch (error) {
             console.error('Erro ao enviar mensagem:', error);
-            console.error('Detalhes do erro:', {
+            
+            // Diagnóstico detalhado do erro
+            const diagnosis = diagnoseFetchError(error, apiUrl || 'URL desconhecida');
+            console.error('Diagnóstico do erro:', diagnosis);
+            console.error('Detalhes completos:', {
                 name: error.name,
                 message: error.message,
-                stack: error.stack
+                stack: error.stack,
+                url: apiUrl
             });
             
-            let msg = 'Não foi possível enviar sua mensagem. ';
+            let msg = 'Não foi possível enviar sua mensagem.\n\n';
             
             if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
-                msg += 'Verifique sua conexão com a internet ou tente novamente mais tarde.';
-                console.error('Possíveis causas: API offline, problema de CORS, ou URL incorreta.');
+                msg += 'Possíveis causas:\n';
+                diagnosis.possibleCauses.slice(0, 3).forEach(cause => {
+                    msg += `• ${cause}\n`;
+                });
+                msg += '\nSugestão: Verifique sua conexão ou entre em contato pelo WhatsApp/Email.';
+                
+                // Log adicional para desenvolvedores
+                console.error('ERRO DE REDE DETECTADO');
+                console.error('URL tentada:', apiUrl);
+                console.error('Origem da página:', window.location.origin);
+                try {
+                    const apiOrigin = new URL(apiUrl).origin;
+                    console.error('Origem da API:', apiOrigin);
+                    if (window.location.origin !== apiOrigin) {
+                        console.error('⚠️ CORS: A requisição está sendo feita entre diferentes origens.');
+                        console.error('   Verifique se o servidor permite requisições CORS deste domínio.');
+                    }
+                } catch (e) {
+                    console.error('Não foi possível determinar a origem da API');
+                }
             } else if (error.name === 'AbortError') {
                 msg += 'A requisição demorou muito. Tente novamente.';
             } else if (error instanceof Error) {
@@ -151,39 +223,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const budgetForm = document.getElementById('budgetForm');
     const submitBtn = budgetForm ? budgetForm.querySelector('button[type="submit"]') : null;
 
-    function getApiBaseUrl() {
-        let baseUrl = null;
-        
-        if (window.__API_BASE_URL__ && typeof window.__API_BASE_URL__ === 'string') {
-            baseUrl = window.__API_BASE_URL__;
-        } else {
-            const metaTag = document.querySelector('meta[name="api-base-url"][content]');
-            if (metaTag && metaTag.getAttribute('content')) {
-                baseUrl = metaTag.getAttribute('content');
-            } else {
-                const host = window.location.hostname;
-                if (host === 'localhost' || host === '127.0.0.1') {
-                    baseUrl = 'http://localhost:5000';
-                }
-            }
-        }
-        
-        if (!baseUrl) {
-            throw new Error('API base URL não configurado. Defina window.__API_BASE_URL__ ou <meta name="api-base-url" content="https://sua-api">.');
-        }
-        
-        // Remove trailing slash if present
-        baseUrl = baseUrl.replace(/\/+$/, '');
-        
-        // Validate URL format
-        try {
-            new URL(baseUrl);
-        } catch (e) {
-            throw new Error(`URL da API inválida: ${baseUrl}`);
-        }
-        
-        return baseUrl;
-    }
 
     function openModal() {
         if (!modal) return;
@@ -288,17 +327,40 @@ document.addEventListener('DOMContentLoaded', function() {
                 closeModal();
             } catch (err) {
                 console.error('Erro ao enviar orçamento:', err);
-                console.error('Detalhes do erro:', {
+                
+                // Diagnóstico detalhado do erro
+                const diagnosis = diagnoseFetchError(err, apiUrl || 'URL desconhecida');
+                console.error('Diagnóstico do erro:', diagnosis);
+                console.error('Detalhes completos:', {
                     name: err.name,
                     message: err.message,
-                    stack: err.stack
+                    stack: err.stack,
+                    url: apiUrl
                 });
                 
-                let msg = 'Não foi possível enviar seu orçamento. ';
+                let msg = 'Não foi possível enviar seu orçamento.\n\n';
                 
                 if (err instanceof TypeError && err.message.includes('Failed to fetch')) {
-                    msg += 'Verifique sua conexão com a internet ou tente novamente mais tarde.';
-                    console.error('Possíveis causas: API offline, problema de CORS, ou URL incorreta.');
+                    msg += 'Possíveis causas:\n';
+                    diagnosis.possibleCauses.slice(0, 3).forEach(cause => {
+                        msg += `• ${cause}\n`;
+                    });
+                    msg += '\nSugestão: Verifique sua conexão ou entre em contato pelo WhatsApp/Email.';
+                    
+                    // Log adicional para desenvolvedores
+                    console.error('ERRO DE REDE DETECTADO');
+                    console.error('URL tentada:', apiUrl);
+                    console.error('Origem da página:', window.location.origin);
+                    try {
+                        const apiOrigin = new URL(apiUrl).origin;
+                        console.error('Origem da API:', apiOrigin);
+                        if (window.location.origin !== apiOrigin) {
+                            console.error('⚠️ CORS: A requisição está sendo feita entre diferentes origens.');
+                            console.error('   Verifique se o servidor permite requisições CORS deste domínio.');
+                        }
+                    } catch (e) {
+                        console.error('Não foi possível determinar a origem da API');
+                    }
                 } else if (err.name === 'AbortError') {
                     msg += 'A requisição demorou muito. Tente novamente.';
                 } else if (err instanceof Error) {
