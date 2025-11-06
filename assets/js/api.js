@@ -193,8 +193,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            console.log('Enviando mensagem para:', apiUrl);
-            console.log('Payload:', payload);
+            console.log('🔍 Enviando mensagem para:', apiUrl);
+            console.log('📦 Payload:', payload);
+            
+            // Teste rápido de conectividade usando o endpoint de health
+            try {
+                const healthUrl = getApiBaseUrl() + '/api/health';
+                const testController = new AbortController();
+                const testTimeout = setTimeout(() => testController.abort(), 5000);
+                const testRes = await fetch(healthUrl, {
+                    method: 'GET',
+                    signal: testController.signal
+                });
+                clearTimeout(testTimeout);
+                if (testRes.ok) {
+                    const healthData = await testRes.json();
+                    console.log('✅ API está acessível (health check):', healthData);
+                } else {
+                    console.warn('⚠️ Health check retornou status:', testRes.status);
+                }
+            } catch (testErr) {
+                console.warn('⚠️ Teste de conectividade falhou:', testErr.message);
+                console.warn('   Isso pode indicar que a API está offline ou inacessível.');
+                // Continuar mesmo assim, pois pode ser um problema temporário
+            }
             
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 segundos de timeout
@@ -206,27 +228,61 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify(payload),
-                signal: controller.signal
+                signal: controller.signal,
+                mode: 'cors' // Garantir que CORS está habilitado
             });
             
             clearTimeout(timeoutId);
+            
+            console.log('📡 Resposta da API:', {
+                status: res.status,
+                statusText: res.statusText,
+                headers: Object.fromEntries(res.headers.entries())
+            });
 
             if (!res.ok) {
                 let errorMessage = `Erro ao enviar mensagem (HTTP ${res.status})`;
+                let errorDetails = null;
                 try {
                     const errData = await res.json();
-                    if (errData && typeof errData === 'object' && errData.error) {
-                        errorMessage = errData.error;
+                    console.error('❌ Erro da API:', errData);
+                    if (errData && typeof errData === 'object') {
+                        if (errData.error) {
+                            errorMessage = errData.error;
+                        }
+                        if (errData.details) {
+                            errorDetails = errData.details;
+                        }
                     } else if (typeof errData === 'string') {
                         errorMessage = errData;
                     }
                 } catch (e) {
-                    // Se não conseguir parsear JSON, usa a mensagem padrão
+                    // Se não conseguir parsear JSON, tenta ler como texto
+                    try {
+                        const text = await res.text();
+                        console.error('❌ Resposta da API (texto):', text);
+                        if (text) {
+                            errorDetails = text.substring(0, 200); // Limitar tamanho
+                        }
+                    } catch (textErr) {
+                        console.error('Não foi possível ler a resposta da API');
+                    }
                 }
-                throw new Error(errorMessage);
+                
+                const fullError = errorDetails ? `${errorMessage}\n\nDetalhes: ${errorDetails}` : errorMessage;
+                throw new Error(fullError);
+            }
+            
+            // Verificar se a resposta é JSON válido
+            let responseData = null;
+            try {
+                responseData = await res.json();
+                console.log('✅ Resposta da API:', responseData);
+            } catch (jsonErr) {
+                console.warn('⚠️ Resposta não é JSON válido, mas status é OK');
             }
 
-            alert('Mensagem enviada com sucesso!');
+            alert('✅ Mensagem enviada com sucesso! Entraremos em contato em breve.');
             form.reset();
         } catch (error) {
             console.error('Erro ao enviar mensagem:', error);
@@ -241,41 +297,59 @@ document.addEventListener('DOMContentLoaded', function() {
                 url: apiUrl || 'URL não disponível'
             });
             
-            let msg = 'Não foi possível enviar sua mensagem.\n\n';
+            let msg = '❌ Não foi possível enviar sua mensagem.\n\n';
             
             if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
-                msg += 'Possíveis causas:\n';
+                msg += '🔍 Possíveis causas:\n';
                 diagnosis.possibleCauses.slice(0, 3).forEach(cause => {
                     msg += `• ${cause}\n`;
                 });
-                msg += '\nSugestão: Verifique sua conexão ou entre em contato pelo WhatsApp/Email.';
+                msg += '\n💡 Sugestões:\n';
+                msg += '• Verifique sua conexão com a internet\n';
+                msg += '• Tente novamente em alguns instantes\n';
+                msg += '• Entre em contato direto:\n';
+                msg += '  📱 WhatsApp: (88) 9 8233-6089\n';
+                msg += '  📧 Email: starkestsuportetecnico@gmail.com';
                 
                 // Log adicional para desenvolvedores
-                console.error('ERRO DE REDE DETECTADO');
-                console.error('URL tentada:', apiUrl || 'URL não disponível');
-                console.error('Origem da página:', window.location.origin);
+                console.error('🚨 ERRO DE REDE DETECTADO');
+                console.error('📍 URL tentada:', apiUrl || 'URL não disponível');
+                console.error('🌐 Origem da página:', window.location.origin);
                 if (apiUrl) {
                     try {
                         const apiOrigin = new URL(apiUrl).origin;
-                        console.error('Origem da API:', apiOrigin);
+                        console.error('🔗 Origem da API:', apiOrigin);
                         if (window.location.origin !== apiOrigin) {
-                            console.error('⚠️ CORS: A requisição está sendo feita entre diferentes origens.');
-                            console.error('   Verifique se o servidor permite requisições CORS deste domínio.');
+                            console.warn('ℹ️ CORS: Requisição entre origens diferentes é normal.');
+                            console.warn('   Origem:', window.location.origin, '→ API:', apiOrigin);
+                            console.warn('   A API já está configurada para permitir CORS.');
                         }
                     } catch (e) {
                         console.error('Não foi possível determinar a origem da API');
                     }
                 }
             } else if (error.name === 'AbortError') {
-                msg += 'A requisição demorou muito. Tente novamente.';
+                msg += '⏱️ A requisição demorou muito (timeout).\n\n';
+                msg += '💡 Tente novamente ou entre em contato:\n';
+                msg += '📱 WhatsApp: (88) 9 8233-6089\n';
+                msg += '📧 Email: starkestsuportetecnico@gmail.com';
             } else if (error instanceof Error) {
-                msg += error.message || 'Tente novamente mais tarde.';
+                const errorMsg = error.message || 'Tente novamente mais tarde.';
+                msg += errorMsg;
+                if (!errorMsg.includes('WhatsApp') && !errorMsg.includes('Email')) {
+                    msg += '\n\n💡 Se o problema persistir, entre em contato:\n';
+                    msg += '📱 WhatsApp: (88) 9 8233-6089\n';
+                    msg += '📧 Email: starkestsuportetecnico@gmail.com';
+                }
             } else if (typeof error === 'string') {
                 msg += error;
             } else if (error && typeof error === 'object' && error.message) {
                 msg += error.message;
             } else {
-                msg += 'Tente novamente mais tarde.';
+                msg += 'Tente novamente mais tarde.\n\n';
+                msg += '💡 Se o problema persistir, entre em contato:\n';
+                msg += '📱 WhatsApp: (88) 9 8233-6089\n';
+                msg += '📧 Email: starkestsuportetecnico@gmail.com';
             }
             
             alert(msg);

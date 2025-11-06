@@ -72,6 +72,11 @@ animatedElements.forEach(el => observer.observe(el));
 
 // ========== Smooth Scroll para Links Internos ==========
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    // Ignorar links que abrem modais
+    if (anchor.classList.contains('open-budget-modal')) {
+        return;
+    }
+    
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
