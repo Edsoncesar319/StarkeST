@@ -431,8 +431,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             const apiOrigin = new URL(apiUrl).origin;
                             console.error('Origem da API:', apiOrigin);
                             if (window.location.origin !== apiOrigin) {
-                                console.error('⚠️ CORS: A requisição está sendo feita entre diferentes origens.');
-                                console.error('   Verifique se o servidor permite requisições CORS deste domínio.');
+                                console.warn('ℹ️ CORS: Requisição entre origens diferentes é normal.');
+                                console.warn('   Origem:', window.location.origin, '→ API:', apiOrigin);
+                                console.warn('   A API já está configurada para permitir CORS.');
                             }
                         } catch (e) {
                             console.error('Não foi possível determinar a origem da API');

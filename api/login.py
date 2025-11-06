@@ -7,17 +7,24 @@ token_store = set()
 
 def handler(request):
     """Handler para Vercel serverless functions"""
-    headers = {
+    # Configurar CORS headers - sempre definir antes do try
+    cors_headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Content-Type': 'application/json'
+        'Access-Control-Max-Age': '3600'
     }
     
-    if request.method == 'OPTIONS':
+    # Obter método HTTP
+    method = getattr(request, 'method', 'POST')
+    if hasattr(request, 'httpMethod'):
+        method = request.httpMethod
+    
+    # Tratar OPTIONS (preflight CORS)
+    if method == 'OPTIONS':
         return {
             'statusCode': 200,
-            'headers': headers,
+            'headers': {**cors_headers, 'Content-Type': 'text/plain'},
             'body': ''
         }
     
@@ -44,13 +51,13 @@ def handler(request):
                 token_store.add(token)
                 return {
                     'statusCode': 200,
-                    'headers': headers,
+                    'headers': {**cors_headers, 'Content-Type': 'application/json'},
                     'body': json.dumps({ 'token': token })
                 }
             else:
                 return {
                     'statusCode': 401,
-                    'headers': headers,
+                    'headers': {**cors_headers, 'Content-Type': 'application/json'},
                     'body': json.dumps({ 'error': 'Credenciais inválidas' })
                 }
         
@@ -61,13 +68,13 @@ def handler(request):
                 token_store.discard(token)
             return {
                 'statusCode': 200,
-                'headers': headers,
+                'headers': {**cors_headers, 'Content-Type': 'application/json'},
                 'body': json.dumps({ 'success': True })
             }
         else:
             return {
                 'statusCode': 404,
-                'headers': headers,
+                'headers': {**cors_headers, 'Content-Type': 'application/json'},
                 'body': json.dumps({ 'error': 'Not found' })
             }
     except Exception as e:
@@ -76,6 +83,6 @@ def handler(request):
         traceback.print_exc()
         return {
             'statusCode': 500,
-            'headers': headers,
+            'headers': {**cors_headers, 'Content-Type': 'application/json'},
             'body': json.dumps({ 'error': 'Erro interno do servidor', 'details': str(e) })
         }

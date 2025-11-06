@@ -32,15 +32,15 @@ def init_db():
 
 def handler(request):
     """Handler para Vercel serverless functions"""
+    # Configurar CORS headers - sempre definir antes do try
+    cors_headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Max-Age': '3600'
+    }
+    
     try:
-        # Configurar CORS headers
-        headers = {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            'Content-Type': 'application/json'
-        }
-        
         # Obter método HTTP
         method = getattr(request, 'method', 'GET')
         if hasattr(request, 'httpMethod'):
@@ -50,7 +50,7 @@ def handler(request):
         if method == 'OPTIONS':
             return {
                 'statusCode': 200,
-                'headers': headers,
+                'headers': {**cors_headers, 'Content-Type': 'text/plain'},
                 'body': ''
             }
         
@@ -80,7 +80,7 @@ def handler(request):
             if missing:
                 return {
                     'statusCode': 400,
-                    'headers': headers,
+                    'headers': {**cors_headers, 'Content-Type': 'application/json'},
                     'body': json.dumps({ 'error': f'Campos ausentes: {", ".join(missing)}' })
                 }
 
@@ -102,7 +102,7 @@ def handler(request):
             
             return {
                 'statusCode': 201,
-                'headers': headers,
+                'headers': {**cors_headers, 'Content-Type': 'application/json'},
                 'body': json.dumps({ 'success': True })
             }
         
@@ -143,14 +143,14 @@ def handler(request):
             
             return {
                 'statusCode': 200,
-                'headers': headers,
+                'headers': {**cors_headers, 'Content-Type': 'application/json'},
                 'body': json.dumps({ 'items': items, 'total': total, 'page': page, 'page_size': page_size })
             }
         
         # Método não suportado
         return {
             'statusCode': 405,
-            'headers': headers,
+            'headers': {**cors_headers, 'Content-Type': 'application/json'},
             'body': json.dumps({ 'error': 'Método não permitido' })
         }
         
@@ -158,7 +158,7 @@ def handler(request):
         print(f"Erro ao decodificar JSON: {e}")
         return {
             'statusCode': 400,
-            'headers': headers,
+            'headers': {**cors_headers, 'Content-Type': 'application/json'},
             'body': json.dumps({ 'error': 'JSON inválido' })
         }
     except Exception as e:
@@ -167,6 +167,6 @@ def handler(request):
         traceback.print_exc()
         return {
             'statusCode': 500,
-            'headers': headers,
+            'headers': {**cors_headers, 'Content-Type': 'application/json'},
             'body': json.dumps({ 'error': 'Erro interno do servidor', 'details': str(e) })
         }
