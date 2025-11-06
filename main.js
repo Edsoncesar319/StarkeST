@@ -88,39 +88,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// ========== Form Submission (Placeholder) ==========
-const contactForm = document.querySelector('.message form');
-
-if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        // Aqui você pode adicionar a lógica de envio do formulário
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData);
-
-        console.log('Form submitted:', data);
-
-        // Feedback visual
-        const button = this.querySelector('button');
-        const originalText = button.textContent;
-        button.textContent = 'Enviando...';
-        button.disabled = true;
-
-        // Simular envio
-        setTimeout(() => {
-            button.textContent = 'Mensagem Enviada!';
-            button.style.backgroundColor = '#10b981';
-
-            setTimeout(() => {
-                button.textContent = originalText;
-                button.style.backgroundColor = '';
-                button.disabled = false;
-                this.reset();
-            }, 2000);
-        }, 1500);
-    });
-}
+// ========== Form Submission ==========
+// O handler do formulário de contato está em assets/js/api.js
+// Este handler antigo foi removido para evitar conflitos
 
 // ========== Atualização automática da navegação ao rolar ==========
 const sections = document.querySelectorAll('.section');
