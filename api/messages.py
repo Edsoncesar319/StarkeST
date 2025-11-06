@@ -1,3 +1,4 @@
+from http.server import BaseHTTPRequestHandler
 import json
 import sqlite3
 import os
@@ -30,59 +31,31 @@ def init_db():
     finally:
         db.close()
 
-def handler(request):
-    """Handler para Vercel serverless functions"""
-    # Configurar CORS headers - sempre definir antes do try
-    cors_headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Max-Age': '3600'
-    }
+class handler(BaseHTTPRequestHandler):
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        self.send_header('Access-Control-Max-Age', '3600')
+        self.end_headers()
     
-    try:
-        # Obter método HTTP
-        method = getattr(request, 'method', 'GET')
-        if hasattr(request, 'httpMethod'):
-            method = request.httpMethod
-        
-        # Tratar OPTIONS (preflight CORS)
-        if method == 'OPTIONS':
-            return {
-                'statusCode': 200,
-                'headers': {**cors_headers, 'Content-Type': 'text/plain'},
-                'body': ''
-            }
-        
-        # Tratar POST
-        if method == 'POST':
+    def do_POST(self):
+        try:
             init_db()
-            
-            # Obter body
-            body = getattr(request, 'body', None)
-            if hasattr(request, 'json'):
-                data = request.json
-            elif isinstance(body, str):
-                data = json.loads(body) if body else {}
-            elif isinstance(body, bytes):
-                data = json.loads(body.decode('utf-8')) if body else {}
-            elif body:
-                data = body
-            else:
-                # Tentar ler do body de outra forma
-                if hasattr(request, 'get_json'):
-                    data = request.get_json(force=True, silent=True) or {}
-                else:
-                    data = {}
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body.decode('utf-8')) if body else {}
             
             required = ['name', 'email', 'subject', 'message']
             missing = [f for f in required if not data.get(f)]
             if missing:
-                return {
-                    'statusCode': 400,
-                    'headers': {**cors_headers, 'Content-Type': 'application/json'},
-                    'body': json.dumps({ 'error': f'Campos ausentes: {", ".join(missing)}' })
-                }
+                self.send_response(400)
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({ 'error': f'Campos ausentes: {", ".join(missing)}' }).encode())
+                return
 
             db = get_db()
             try:
@@ -100,32 +73,31 @@ def handler(request):
             finally:
                 db.close()
             
-            return {
-                'statusCode': 201,
-                'headers': {**cors_headers, 'Content-Type': 'application/json'},
-                'body': json.dumps({ 'success': True })
-            }
-        
-        # Tratar GET
-        if method == 'GET':
+            self.send_response(201)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({ 'success': True }).encode())
+        except Exception as e:
+            print(f"Erro ao criar mensagem: {e}")
+            import traceback
+            traceback.print_exc()
+            self.send_response(500)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({ 'error': 'Erro interno do servidor', 'details': str(e) }).encode())
+    
+    def do_GET(self):
+        try:
             init_db()
-            query_params = {}
+            from urllib.parse import urlparse, parse_qs
             
-            if hasattr(request, 'query'):
-                query_params = request.query or {}
-            elif hasattr(request, 'args'):
-                query_params = request.args or {}
+            parsed_path = urlparse(self.path)
+            query_params = parse_qs(parsed_path.query)
             
-            page = 1
-            page_size = 10
-            
-            if isinstance(query_params, dict):
-                page = int(query_params.get('page', 1))
-                page_size = int(query_params.get('page_size', 10))
-            elif isinstance(query_params.get('page'), list):
-                page = int(query_params.get('page', ['1'])[0])
-                page_size = int(query_params.get('page_size', ['10'])[0])
-            
+            page = int(query_params.get('page', ['1'])[0])
+            page_size = int(query_params.get('page_size', ['10'])[0])
             page = max(page, 1)
             page_size = max(min(page_size, 100), 1)
 
@@ -141,32 +113,17 @@ def handler(request):
             finally:
                 db.close()
             
-            return {
-                'statusCode': 200,
-                'headers': {**cors_headers, 'Content-Type': 'application/json'},
-                'body': json.dumps({ 'items': items, 'total': total, 'page': page, 'page_size': page_size })
-            }
-        
-        # Método não suportado
-        return {
-            'statusCode': 405,
-            'headers': {**cors_headers, 'Content-Type': 'application/json'},
-            'body': json.dumps({ 'error': 'Método não permitido' })
-        }
-        
-    except json.JSONDecodeError as e:
-        print(f"Erro ao decodificar JSON: {e}")
-        return {
-            'statusCode': 400,
-            'headers': {**cors_headers, 'Content-Type': 'application/json'},
-            'body': json.dumps({ 'error': 'JSON inválido' })
-        }
-    except Exception as e:
-        print(f"Erro: {e}")
-        import traceback
-        traceback.print_exc()
-        return {
-            'statusCode': 500,
-            'headers': {**cors_headers, 'Content-Type': 'application/json'},
-            'body': json.dumps({ 'error': 'Erro interno do servidor', 'details': str(e) })
-        }
+            self.send_response(200)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({ 'items': items, 'total': total, 'page': page, 'page_size': page_size }).encode())
+        except Exception as e:
+            print(f"Erro ao listar mensagens: {e}")
+            import traceback
+            traceback.print_exc()
+            self.send_response(500)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({ 'error': 'Erro interno do servidor', 'details': str(e) }).encode())
