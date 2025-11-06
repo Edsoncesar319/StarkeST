@@ -179,8 +179,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         setSubmitting(true);
+        
+        // Declarar apiUrl fora do try para estar acessível no catch
+        let apiUrl = null;
+        
         try {
-            let apiUrl;
             try {
                 apiUrl = getApiBaseUrl() + '/api/messages';
             } catch (configError) {
@@ -235,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: error.name,
                 message: error.message,
                 stack: error.stack,
-                url: apiUrl
+                url: apiUrl || 'URL não disponível'
             });
             
             let msg = 'Não foi possível enviar sua mensagem.\n\n';
@@ -249,17 +252,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Log adicional para desenvolvedores
                 console.error('ERRO DE REDE DETECTADO');
-                console.error('URL tentada:', apiUrl);
+                console.error('URL tentada:', apiUrl || 'URL não disponível');
                 console.error('Origem da página:', window.location.origin);
-                try {
-                    const apiOrigin = new URL(apiUrl).origin;
-                    console.error('Origem da API:', apiOrigin);
-                    if (window.location.origin !== apiOrigin) {
-                        console.error('⚠️ CORS: A requisição está sendo feita entre diferentes origens.');
-                        console.error('   Verifique se o servidor permite requisições CORS deste domínio.');
+                if (apiUrl) {
+                    try {
+                        const apiOrigin = new URL(apiUrl).origin;
+                        console.error('Origem da API:', apiOrigin);
+                        if (window.location.origin !== apiOrigin) {
+                            console.error('⚠️ CORS: A requisição está sendo feita entre diferentes origens.');
+                            console.error('   Verifique se o servidor permite requisições CORS deste domínio.');
+                        }
+                    } catch (e) {
+                        console.error('Não foi possível determinar a origem da API');
                     }
-                } catch (e) {
-                    console.error('Não foi possível determinar a origem da API');
                 }
             } else if (error.name === 'AbortError') {
                 msg += 'A requisição demorou muito. Tente novamente.';
@@ -343,13 +348,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 submitBtn.textContent = 'Enviando...';
             }
 
+            // Declarar apiUrl fora do try para estar acessível no catch
+            let apiUrl = null;
+            
             try {
-                let apiUrl;
                 try {
                     apiUrl = getApiBaseUrl() + '/api/budgets';
                 } catch (configError) {
                     console.error('Erro de configuração da API:', configError);
                     alert('Erro de configuração: ' + (configError.message || 'URL da API não configurada corretamente.'));
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Enviar pedido';
+                    }
                     return;
                 }
                 
@@ -399,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     name: err.name,
                     message: err.message,
                     stack: err.stack,
-                    url: apiUrl
+                    url: apiUrl || 'URL não disponível'
                 });
                 
                 let msg = 'Não foi possível enviar seu orçamento.\n\n';
@@ -413,17 +424,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Log adicional para desenvolvedores
                     console.error('ERRO DE REDE DETECTADO');
-                    console.error('URL tentada:', apiUrl);
+                    console.error('URL tentada:', apiUrl || 'URL não disponível');
                     console.error('Origem da página:', window.location.origin);
-                    try {
-                        const apiOrigin = new URL(apiUrl).origin;
-                        console.error('Origem da API:', apiOrigin);
-                        if (window.location.origin !== apiOrigin) {
-                            console.error('⚠️ CORS: A requisição está sendo feita entre diferentes origens.');
-                            console.error('   Verifique se o servidor permite requisições CORS deste domínio.');
+                    if (apiUrl) {
+                        try {
+                            const apiOrigin = new URL(apiUrl).origin;
+                            console.error('Origem da API:', apiOrigin);
+                            if (window.location.origin !== apiOrigin) {
+                                console.error('⚠️ CORS: A requisição está sendo feita entre diferentes origens.');
+                                console.error('   Verifique se o servidor permite requisições CORS deste domínio.');
+                            }
+                        } catch (e) {
+                            console.error('Não foi possível determinar a origem da API');
                         }
-                    } catch (e) {
-                        console.error('Não foi possível determinar a origem da API');
                     }
                 } else if (err.name === 'AbortError') {
                     msg += 'A requisição demorou muito. Tente novamente.';
