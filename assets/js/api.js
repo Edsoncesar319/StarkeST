@@ -84,6 +84,70 @@ function diagnoseFetchError(error, url) {
     return diagnosis;
 }
 
+// Função para testar conectividade da API
+async function testApiConnection() {
+    try {
+        // Verificar se a configuração está disponível
+        let apiUrl;
+        try {
+            apiUrl = getApiBaseUrl() + '/api/health';
+        } catch (configError) {
+            console.warn('⚠️ Configuração da API não disponível ainda:', configError.message);
+            return false;
+        }
+        
+        console.log('🔍 Testando conectividade da API:', apiUrl);
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 segundos para teste
+        
+        const res = await fetch(apiUrl, {
+            method: 'GET',
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (res.ok) {
+            const data = await res.json();
+            console.log('✅ API está acessível:', data);
+            return true;
+        } else {
+            console.warn('⚠️ API retornou status:', res.status);
+            return false;
+        }
+    } catch (error) {
+        // Não mostrar erro como crítico, apenas informar
+        if (error.name === 'AbortError') {
+            console.warn('⚠️ Teste de conectividade da API expirou (timeout)');
+        } else if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+            console.warn('⚠️ API não está acessível no momento. Isso pode ser normal se você estiver em desenvolvimento local.');
+            console.warn('   URL tentada:', getApiBaseUrl() + '/api/health');
+        } else {
+            console.warn('⚠️ Erro ao testar API:', error.message);
+        }
+        return false;
+    }
+}
+
+// Testar conectividade quando a página carregar (apenas em desenvolvimento)
+// Usar DOMContentLoaded para garantir que o script de configuração já executou
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    // Aguardar um pouco mais para garantir que tudo está carregado
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            // Testar apenas se a configuração estiver disponível
+            if (window.__API_BASE_URL__ || document.querySelector('meta[name="api-base-url"][content]')) {
+                testApiConnection().catch(() => {
+                    // Silenciosamente ignorar erros no teste
+                });
+            } else {
+                console.warn('⚠️ Configuração da API não encontrada. Teste de conectividade pulado.');
+            }
+        }, 2000); // Aguardar 2 segundos para garantir que tudo está pronto
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const contactsSection = document.querySelector('#contacts');
     if (!contactsSection) return;
